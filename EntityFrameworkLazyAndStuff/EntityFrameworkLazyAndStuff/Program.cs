@@ -14,7 +14,7 @@ try
     builder.Services.AddDbContext<LocalDbContext>(opt =>
     {
         opt.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["Default"]);
-        //.UseLazyLoadingProxies(); <- for automatic lazy loading with virtual properties
+        opt.UseLazyLoadingProxies(); //<- for automatic lazy loading with virtual properties
     });
 
     var app = builder.Build();

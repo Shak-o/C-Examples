@@ -20,7 +20,7 @@ namespace EntityFrameworkLazyAndStuff.Infrastructure.Entities
         {
             LazyLoader = loader;
         }
-        public MaTestModel? MaTestModel
+        public virtual MaTestModel? MaTestModel
         {
             get => LazyLoader.Load(this, ref _maTestModel);
             set => _maTestModel = value;

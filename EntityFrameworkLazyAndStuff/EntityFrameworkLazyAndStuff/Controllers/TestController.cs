@@ -46,7 +46,7 @@ namespace EntityFrameworkLazyAndStuff.Controllers
         [HttpGet("Testt")]
         public async Task Nothing()
         {
-            var result = await _context.OtherTestModels.Include(x => x.MaTest).Where(x => x.Name == "bb").FirstAsync();
+            var result = await _context.OtherTestModels.Where(x => x.Name == "bb").FirstAsync();
             var something = "";
             var test = result.MaTest;
         }
@@ -54,7 +54,7 @@ namespace EntityFrameworkLazyAndStuff.Controllers
         [HttpGet("ThirdTestt")]
         public async Task NothingThird()
         {
-            var result = await _context.ThirdTestModels.Include(x => x.MaTestModel).Where(x => x.Name == "bb").FirstAsync();
+            var result = await _context.ThirdTestModels.Where(x => x.Name == "bb").FirstAsync();
             var something = "";
             var test = result.MaTestModel;
         }
