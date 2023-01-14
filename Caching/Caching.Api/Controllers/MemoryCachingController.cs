@@ -26,11 +26,11 @@ namespace Caching.Api.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             var toReturn = Enumerable.Range(1, 1).Select(index => new WeatherForecast
-                {
-                    Date = DateTime.Now.AddDays(index),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-                })
+            {
+                Date = DateTime.Now.AddDays(index),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
                 .ToList();
 
             var entryOptions = new MemoryCacheEntryOptions()
