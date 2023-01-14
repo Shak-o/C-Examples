@@ -7,6 +7,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
+builder.Services.AddDistributedSqlServerCache(x =>
+{
+    x.ConnectionString = builder.Configuration.GetConnectionString("Default");
+    x.TableName = "Cache";
+    x.SchemaName = "dbo";
+});
 
 var app = builder.Build();
 

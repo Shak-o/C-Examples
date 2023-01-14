@@ -5,7 +5,7 @@ namespace Caching.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class MemoryCachingController : ControllerBase
     {
         private readonly IMemoryCache _cache;
         private const string CacheKey = "testCache";
@@ -14,9 +14,9 @@ namespace Caching.Api.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<MemoryCachingController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMemoryCache cache)
+        public MemoryCachingController(ILogger<MemoryCachingController> logger, IMemoryCache cache)
         {
             _logger = logger;
             _cache = cache;
