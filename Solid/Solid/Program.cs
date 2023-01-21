@@ -7,3 +7,4 @@ var emailService = new EmailService();
 service.AddEmployee(employee);
 Console.WriteLine(EmployeeData.Employees.Count);
 emailService.SendMail("message", "tome");
+Console.WriteLine("random change");
