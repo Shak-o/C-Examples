@@ -1,3 +1,5 @@
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,11 +9,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddStackExchangeRedisCache(x =>
-{
-    x.Configuration = builder.Configuration.GetConnectionString("Redis");
-    x.InstanceName = "test";
-});
+//builder.Services.AddStackExchangeRedisCache(x =>
+//{
+//    x.InstanceName = "MyRedis";
+//    x.ConfigurationOptions = new ConfigurationOptions
+//    {
+//        EndPoints = new EndPointCollection() { "localhost:32768" },
+//        Password = "redispwd"
+//    };
+//});
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(new ConfigurationOptions()
+    {
+        EndPoints =
+        {
+            "localhost:32768"
+        },
+        Password = "redispw"
+    }));
 
 var app = builder.Build();
 
