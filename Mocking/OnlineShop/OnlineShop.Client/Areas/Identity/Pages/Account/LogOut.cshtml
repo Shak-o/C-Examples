@@ -1,0 +1,23 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using OnlineShop.Domain.Accounts
+@using OnlineShop.Domain.Customers
+@attribute [IgnoreAntiforgeryToken]
+@inject SignInManager<Account> SignInManager
+
+@functions {
+    public async Task<IActionResult> OnPost()
+    {
+        if (SignInManager.IsSignedIn(User))
+        {
+            //var f = SignInManager.UserManager.GetUserId(HttpContext.User);;
+            foreach (var claim in User.Claims)
+            {
+                var t = claim;
+            }
+            await SignInManager.SignOutAsync();
+        }
+
+        return Redirect("~/");
+    }
+}

@@ -1,0 +1,124 @@
+﻿@page "/ProductCategory/list"
+@using MediatR
+@using Microsoft.AspNetCore.Mvc
+@using OnlineShop.Domain.ProductCategories.Commands
+@using OnlineShop.Domain.ProductCategories.Queries
+@inject IMediator Mediator
+@inject NavigationManager NavManager;
+
+@if (Data == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    if (Error.Count > 0)
+    {
+        
+        @foreach (var item in Error)
+        {
+            <div class="alert alert-danger" role="alert">
+                @item
+            </div>
+        }
+        
+    }
+   
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Product Count</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var product in Data)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.ProductCount.ToString()</td>
+                <td><button type="button" class="btn btn-primary" @onclick="() => Edit(product.Id)">Edit</button> 
+                    <button type="button" class="btn btn-danger" @onclick="() => Delete(product.Id)">Delete</button>
+                    <button type="button" class="btn btn-secondary" @onclick="() => View(product.Id)">View</button>
+                    </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-success" @onclick="Create">Create</button>
+
+    <nav aria-label="...">
+        <ul class="pagination">
+            @if (CurrentPage < 3)
+            {
+
+            }
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active">
+                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+}
+
+@code {
+    public List<ProductCategoryListQueryResult> Data { get; set; }
+    public int MaxPages { get; set; }
+    public int CurrentPage { get; set; }
+    public int RequestedPage { get; set; }
+    public int EditId { get; set; }
+    List<string> Error { get; set; } = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPage = 0;
+        var command = new GetProductCategoriesCommand() { Filter = null, Includes = null, Page = CurrentPage };
+        Data = await Mediator.Send(command);
+    }
+
+    private void Edit(int id)
+    {
+        NavManager.NavigateTo($"/ProductCategory/Edit/{id}");
+    }
+
+    private void View(int id)
+    {
+        NavManager.NavigateTo($"/ProductCategory/view/{id}");
+    }
+
+    private void Create()
+    {
+        NavManager.NavigateTo($"/ProductCategory/create");
+    }
+
+    private async Task Delete(int id)
+    {
+        if (Data.First(x => x.Id == id).ProductCount != 0)
+        {
+            Error.Add("You cant delete this item, Products count is not 0");
+            return;
+        }
+
+        var command = new DeleteProductCategoryCommand() { Id = id };
+        await Mediator.Send(command);
+        await Clear().ConfigureAwait(false);
+    }
+
+    private async Task Clear()
+    {
+        await Task.Delay(5000);
+        Error.Clear();
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,134 @@
+﻿@page "/Customer/List"
+@using MediatR
+@using OnlineShop.Domain.SalesOrderHeaders.Commands
+@using OnlineShop.Domain.SalesOrderHeaders.Queries
+@using System.Globalization
+@using OnlineShop.Domain.Customers.Commands
+@using OnlineShop.Domain.Customers.Queries
+@inject IMediator Mediator;
+@inject NavigationManager NavManager;
+
+@if (_data == null)
+{
+        <p><em>Loading...</em></p>
+}
+else
+{
+if (_errors.Count > 0)
+{
+
+    @foreach (var item in _errors)
+    {
+                    <div class="alert alert-danger" role="alert">
+            @item
+                    </div>
+    }
+
+}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>CompanyName</th>
+            <th>EmailAddress</th>
+            <th>Phone</th>
+            <th>NumberOfAddresses</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var customer in _data)
+        {
+                <tr>
+                    <td>@customer.Title</td>
+                    <td>@customer.FirstName</td>
+                    <td>@customer.LastName</td>
+                    <td>@customer.CompanyName</td>
+                    <td>@customer.EmailAddress</td>
+                    <td>@customer.Phone</td>
+                    <td>@customer.NumberOfAddresses.ToString()</td>
+                    <td><button type="button" class="btn btn-primary" @onclick="() => Edit(customer.Id)">Edit</button> 
+                        <button type="button" class="btn btn-danger" @onclick="() => Delete(customer.Id)">Delete</button>
+                        <button type="button" class="btn btn-secondary" @onclick="() => View(customer.Id)">View</button>
+                    </td>
+                </tr>
+        }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-success" @onclick="Create">Create</button>
+
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class=@(CurrentPage <= 0 ? "page-item disabled" : "page-item")>
+                <a class="page-link" tabindex="-1" @onclick="() => RefreshData(CurrentPage--)">Previous</a>
+            </li>
+            <li class="page-item" @onclick="() => RefreshData(CurrentPage <= 0 ? CurrentPage: CurrentPage--)">
+                <a class="page-link">@((CurrentPage <= 0 ? 1 : CurrentPage).ToString())</a>
+            </li>
+            <li class="page-item active" @onclick="() => RefreshData(CurrentPage)">
+                <a class="page-link" >@((CurrentPage + 1).ToString())<span class="sr-only">(current)</span></a>
+            </li>
+                <li class="page-item" @onclick="() => RefreshData(CurrentPage >= _maxPages ? CurrentPage: CurrentPage++)">
+                <a class="page-link">@((CurrentPage + 2).ToString())</a>
+            </li>
+            <li class="test">
+                    <a class="page-link" @onclick="() => RefreshData(CurrentPage >= _maxPages ? CurrentPage: CurrentPage++)">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+}
+
+
+@code {
+    public int CurrentPage { get; set; }
+    private int _maxPages;
+    private List<CustomerQuery>? _data;
+    private List<string> _errors = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPage = 0;
+        var command = new GetCustomersCommand() { Page = CurrentPage };
+        var result = await Mediator.Send(command);
+        _data = result.Customers;
+        _maxPages = result.MaxPages;
+    }
+
+    public async Task RefreshData(int page)
+    {
+        if (page < 0 || page > _maxPages)
+            return;
+
+        var command = new GetCustomersCommand() { Page = CurrentPage };
+        var result = await Mediator.Send(command);
+        _data = result.Customers;
+        _maxPages = result.MaxPages;
+        StateHasChanged();
+    }
+
+    public void Edit(int id)
+    {
+        NavManager.NavigateTo($"/Customer/Edit/{id}");
+    }
+
+    public void View(int id)
+    {
+        NavManager.NavigateTo($"/Customer/view/{id}");
+    }
+
+    private async Task Delete(int id)
+    {
+        var command = new DeleteCustomerCommand() { Id = id };
+        await Mediator.Send(command);
+    }
+
+    public void Create()
+    {
+        NavManager.NavigateTo($"/Customer/create");
+    }
+}

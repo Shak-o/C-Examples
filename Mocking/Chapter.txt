@@ -1,0 +1,7 @@
+Moq
+RhinoMocks
+FakeItEasy
+Moq.Contrib.HttpClient
+NSubstitute
+AutoFixture
+-Mockaco
