@@ -1,16 +1,11 @@
-﻿using OnlineShop.Domain.SalesOrderHeaders.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineShop.Domain.SalesOrderHeaders;
+﻿using OnlineShop.Domain.SalesOrderHeaders;
+using OnlineShop.Domain.SalesOrderHeaders.Queries;
 
-namespace OnlineShop.Persistence.Interfaces
+namespace OnlineShop.Persistence.Interfaces;
+
+public interface IOrdersRepository : IRepository<SalesOrderHeader>
 {
-    public interface IOrdersRepository : IRepository<SalesOrderHeader>
-    {
-        Task<List<OrderListQueryResult>> GetSalesAsync(int page, int count);
-        Task<OrderQueryResult> GetOrderAsync(int id);
-    }
+    Task<List<OrderListQueryResult>> GetSalesAsync(int page, int count);
+    Task<OrderQueryResult> GetOrderAsync(int id);
+    Task<decimal> DoSomeCalculation(decimal someNumber);
 }

@@ -217,6 +217,11 @@ namespace OnlineShop.Persistence.Repositories
             }
         }
 
+        public Task DeleteAsync(T entity, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task IncludeProperties(IQueryable<T> toreTurn, string[] includeProperties, CancellationToken cancellationToken)
         {
             foreach (var item in toreTurn)

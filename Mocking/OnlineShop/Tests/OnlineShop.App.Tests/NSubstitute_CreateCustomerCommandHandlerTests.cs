@@ -14,7 +14,7 @@ namespace OnlineShop.App.Tests
         private readonly IRepository<Customer> _customerRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
-        private CreateCustomerCommandHandler _sut;
+        private readonly CreateCustomerCommandHandler _sut;
 
         public NSubstitute_CreateCustomerCommandHandlerTests()
         {

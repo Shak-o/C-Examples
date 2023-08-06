@@ -99,5 +99,11 @@ namespace OnlineShop.Persistence.Repositories
             }
            
         }
+
+        public Task<decimal> DoSomeCalculation(decimal someNumber)
+        {
+            var random = new Random();
+            return Task.FromResult(someNumber - random.Next(0, 100));
+        }
     }
 }

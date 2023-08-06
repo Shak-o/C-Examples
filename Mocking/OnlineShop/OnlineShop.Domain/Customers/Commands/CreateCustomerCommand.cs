@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 
 namespace OnlineShop.Domain.Customers.Commands
 {
@@ -19,7 +14,7 @@ namespace OnlineShop.Domain.Customers.Commands
         public string? SalesPerson { get; set; }
         public string? EmailAddress { get; set; }
         public string? Phone { get; set; }
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
         
         #region Constructors
         public CreateCustomerCommand()

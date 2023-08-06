@@ -1,36 +1,52 @@
 ﻿using AutoMapper;
 using MediatR;
-using OnlineShop.App.Exceptions;
 using OnlineShop.Domain.SalesOrderHeaders;
 using OnlineShop.Domain.SalesOrderHeaders.Commands;
 using OnlineShop.Persistence.Interfaces;
 
-namespace OnlineShop.App.CommandHandlers.Orders
+namespace OnlineShop.App.CommandHandlers.Orders;
+
+public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
 {
-    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
+    private readonly IMapper _mapper;
+    private readonly IRepository<SalesOrderHeader> _repository;
+    private readonly IOrdersRepository _customRepository;
+    
+    public CreateOrderCommandHandler(IRepository<SalesOrderHeader> repository, IMapper mapper, IOrdersRepository customRepository)
     {
-        private readonly IRepository<SalesOrderHeader> _repository;
-        private readonly IMapper _mapper;
+        _repository = repository;
+        _mapper = mapper;
+        _customRepository = customRepository;
+    }
 
-        public CreateOrderCommandHandler(IRepository<SalesOrderHeader> repository, IMapper mapper)
+    public async Task<Unit> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _repository = repository;
-            _mapper = mapper;
-        }
-
-        public async Task<Unit> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var convert = _mapper.Map<SalesOrderHeader>(request.Order);
-                await _repository.AddAsync(convert, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                throw new AppException($"Error during saving:{ex.Message}");
-            }
-
+            var convert = _mapper.Map<SalesOrderHeader>(request.Order);
+            
+            var result = await _customRepository
+                .DoSomeCalculation(Calculation(convert.SubTotal))
+                .ConfigureAwait(false);
+            convert.Freight = result;
+            
+            await _repository.AddAsync(convert, cancellationToken);
             return Unit.Value;
         }
+        catch (ApplicationException appException)
+        {
+            // some special logic for app exception
+            throw;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public decimal Calculation(decimal total)
+    {
+        var result = 100 - total;
+        return result;
     }
 }

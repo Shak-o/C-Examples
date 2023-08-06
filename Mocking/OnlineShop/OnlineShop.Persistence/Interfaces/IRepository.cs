@@ -20,5 +20,6 @@ namespace OnlineShop.Persistence.Interfaces
         Task AddAsync(T obj, CancellationToken cancellationToken);
         Task UpdateAsync(T obj, CancellationToken cancellationToken);
         Task DeleteAsync(int id, CancellationToken cancellationToken);
+        Task DeleteAsync(T entity, CancellationToken cancellationToken);
     }
 }

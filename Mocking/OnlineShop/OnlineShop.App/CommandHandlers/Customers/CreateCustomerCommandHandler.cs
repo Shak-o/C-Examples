@@ -27,14 +27,14 @@ namespace OnlineShop.App.CommandHandlers.Customers
                 throw new ApplicationException("Invalid parameters, missing required parameters");
             }
             var restrictedCompanies = await _companyRepository.GetRestrictedCompaniesAsync().ConfigureAwait(false);
-
+            
             if (restrictedCompanies.Contains(request.CompanyName))
             {
                 throw new ApplicationException("Restricted company");
             }
 
             var mapped = _mapper.Map<Customer>(request);
-
+            
             mapped.Rowguid = Guid.NewGuid();
 
             await _repository.AddAsync(mapped, cancellationToken);
