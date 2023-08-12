@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFrameXCookie.Client", "IFrameXCookie.Client\IFrameXCookie.Client.csproj", "{4F041E6E-B09A-48E5-A236-2455006EDA00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OtherApplication.Client", "OtherApplication.Client\OtherApplication.Client.csproj", "{A6F4C89F-5985-49B8-9F2F-A4E94D655595}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F041E6E-B09A-48E5-A236-2455006EDA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F041E6E-B09A-48E5-A236-2455006EDA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F041E6E-B09A-48E5-A236-2455006EDA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F041E6E-B09A-48E5-A236-2455006EDA00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6F4C89F-5985-49B8-9F2F-A4E94D655595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6F4C89F-5985-49B8-9F2F-A4E94D655595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6F4C89F-5985-49B8-9F2F-A4E94D655595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6F4C89F-5985-49B8-9F2F-A4E94D655595}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
