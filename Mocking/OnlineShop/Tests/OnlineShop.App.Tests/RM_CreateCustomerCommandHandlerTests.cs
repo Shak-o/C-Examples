@@ -26,7 +26,7 @@ public class RM_CreateCustomerCommandHandlerTests
     }
     
     // https://stackoverflow.com/questions/75919799/rhino-mock-compatibility-with-net-6
-    [Fact(Skip = "Rhino Mocks is practically dead")]
+    [Fact(Skip = "RhinoMock is practically dead")]
     public async Task HandleAsync_WhenEverythingOk_ShouldCallRepositoryAdd()
     {
         // Arrange

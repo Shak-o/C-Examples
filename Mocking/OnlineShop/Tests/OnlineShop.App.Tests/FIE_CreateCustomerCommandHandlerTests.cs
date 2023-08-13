@@ -10,6 +10,7 @@ using Times = FakeItEasy.Times;
 
 namespace OnlineShop.App.Tests;
 
+// ReSharper disable once InconsistentNaming
 public class FIE_CreateCustomerCommandHandlerTests
 {
     private readonly ICompanyRepository _companyRepository;
