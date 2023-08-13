@@ -18,4 +18,5 @@
       <ProjectReference Include="..\MyQueryApp.Persistence\MyQueryApp.Persistence.csproj" />
     </ItemGroup>
 
+
 </Project>

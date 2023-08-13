@@ -3,6 +3,7 @@ namespace MyQueryApp.Domain.Models;
 public class PersonQueryModel
 {
     public int Id { get; set; }
+    public int IdInMainTable { get; set; }
     public string Name { get; set; } = null!;
     public string SurName { get; set; } = null!;
     public DateTime DateOfBirth { get; set; }

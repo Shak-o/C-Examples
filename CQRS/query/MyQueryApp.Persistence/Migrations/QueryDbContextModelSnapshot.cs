@@ -33,6 +33,9 @@ namespace MyQueryApp.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdInMainTable")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -47,7 +50,7 @@ namespace MyQueryApp.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id", "Name", "SurName");
+                    b.HasIndex("Id", "Name", "SurName", "IdInMainTable");
 
                     b.ToTable("PersonQueryModels");
                 });

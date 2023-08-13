@@ -14,13 +14,13 @@ public class PersonQueryModelConfiguration : IEntityTypeConfiguration<PersonQuer
         builder.HasKey(x => x.Id);
         
         var userListConverter = new ValueConverter<List<UserQueryModel>, string>(
-            v => JsonSerializer.Serialize(v, (JsonTypeInfo<List<UserQueryModel>>)default),
-            v => JsonSerializer.Deserialize<List<UserQueryModel>>(v, (JsonTypeInfo<List<UserQueryModel>>)default));
+            v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+            v => JsonSerializer.Deserialize<List<UserQueryModel>>(v, new JsonSerializerOptions()));
 
         builder.Property(x => x.Users)
             .HasConversion(userListConverter)
             .IsRequired();
         
-        builder.HasIndex(x => new { x.Id, x.Name, x.SurName });
+        builder.HasIndex(x => new { x.Id, x.Name, x.SurName, x.IdInMainTable });
     }
 }
