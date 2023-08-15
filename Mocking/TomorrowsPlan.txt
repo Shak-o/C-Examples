@@ -1,0 +1,10 @@
+გადავხედოთ დოკუმენტაციას და ამოვწეროთ Key ტექსტები (Max 5 min):
+Moq:
+    1)რატომაა კარგი moq 
+    2)key features (creating mock/spies, automock) #add one more
+NSubstitute
+    1)რატომაა კარგი NSubstitute
+    2)key (mocks/spies, automock, better argument matching) #add one more
+FakeItEasy
+    1)რატომაა კარგი FakeItEasy
+    2)key features (mock/spies, autofake, better readability, faster, newer)

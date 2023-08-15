@@ -1,6 +1,6 @@
 Moq + (does not have a documentation)
 RhinoMocks + (does not have a documentation && out of support)
-FakeItEasy 
+FakeItEasy +
 Moq.Contrib.HttpClient
 NSubstitute + 
 AutoFixture
