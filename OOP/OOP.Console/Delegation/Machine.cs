@@ -7,8 +7,6 @@ namespace OOP.Console.Delegation;
 /// The main idea behind delegation is to use composition in situations where inheritance might seem like the only solution.
 /// It can be summarized by the phrase: "Delegation is when you want your object to perform some work, but instead,
 /// it hands off the request to a helper object."
-/// 
-
 /// </summary>
 public class Machine
 {
