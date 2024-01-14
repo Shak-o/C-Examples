@@ -1,0 +1,6 @@
+@AspExample.Auth_HostAddress = http://localhost:5274
+
+GET {{AspExample.Auth_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,77 @@
+{
+  "resources": {
+    "AppDb": {
+      "type": "sqlserver.connection.v1",
+      "connectionString": "Server=localhost;Database=AppDb;User Id=SA;Password=Qwerty1$;TrustServerCertificate=True;"
+    },
+    "AuthDb": {
+      "type": "sqlserver.connection.v1",
+      "connectionString": "Server=localhost;Database=AuthDb;User Id=SA;Password=Qwerty1$;TrustServerCertificate=True;"
+    },
+    "aspexample.api": {
+      "type": "project.v0",
+      "path": "..\\..\\AspExample.Api\\AspExample.Api.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "ConnectionStrings__AppDb": "{AppDb.connectionString}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "aspexample.auth": {
+      "type": "project.v0",
+      "path": "..\\..\\AspExample.Auth\\AspExample.Auth.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "aspexample.eventsfront": {
+      "type": "project.v0",
+      "path": "..\\..\\AspExample.EventsFront\\AspExample.EventsFront.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "services__aspexample.api__0": "{aspexample.api.bindings.http.url}",
+        "services__aspexample.api__1": "{aspexample.api.bindings.https.url}",
+        "services__aspexample.auth__0": "{aspexample.auth.bindings.http.url}",
+        "services__aspexample.auth__1": "{aspexample.auth.bindings.https.url}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    }
+  }
+}
