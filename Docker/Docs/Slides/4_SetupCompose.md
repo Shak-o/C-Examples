@@ -1,58 +1,61 @@
 ﻿### Slide 4: Setting Up Infrastructure with Docker
 
-**Title:** Simplifying Infrastructure Setup with Docker
+**Title:** Streamlining Infrastructure Setup Using Docker
 
 **Content:**
 
-- **Overview of Docker Compose:**
-    - Docker Compose is a tool that allows you to define and run multi-container Docker applications. With a simple YAML file, you can configure all your application’s services and manage them with a single command.
+- **Introduction to Docker Containers:**
+    - Explain what a Docker container is: a portable and isolated environment where a piece of software can run. This ensures the software runs the same way on any machine.
 
-- **Example Setup:**
-    - Discuss how to set up a typical development environment with SQL Server, Redis, and RabbitMQ using Docker Compose.
-    - Include snippets from a `docker-compose.yml` file that define each service.
+- **Example: Setting Up Redis with Docker:**
+    - Walk through the simple steps of setting up a Redis database using Docker. Explain how Docker ensures that Redis can be installed and run consistently on any system without the usual installation complexities.
 
-- **Benefits of Using Docker for Infrastructure:**
-    - **Consistency:** Every member of your team can work with the exact same development environment.
-    - **Speed:** Set up and tear down development environments in minutes or even seconds.
-    - **Isolation:** Each service runs in its own container, ensuring that it does not interfere with other running services.
+- **Command Explanation:**
+    - Show the basic Docker command to pull the Redis image and run it in a container:
+      ```bash
+      docker run --name my-redis -d redis
+      ```
+    - Explain each part of the command (`run`, `--name`, `-d`, and `redis`).
+
+- **Benefits of Using Docker:**
+    - **Simplicity:** Setting up a service like Redis requires only one command.
+    - **Consistency:** The Redis version and setup will be the same on every developer's machine.
+    - **Isolation:** Redis runs in its own isolated environment, avoiding conflicts with other software on the machine.
 
 **Visual Aid:**
-- Diagram of Docker containers linked through Docker Compose, showing how individual services like SQL Server, Redis, and RabbitMQ are interconnected.
-- A sample `docker-compose.yml` file showing the configuration for each service.
+- Include a simple diagram showing a computer with Docker installed and a Redis container running inside it.
 
 ### Speech Script:
 
-**Slide 4: Simplifying Infrastructure Setup with Docker**
+**Slide 4: Streamlining Infrastructure Setup Using Docker**
 
-"In this part of our presentation, we'll look at how Docker can be used to dramatically simplify the setup of software infrastructure. One of Docker’s most powerful features for developers is Docker Compose, which lets us manage multiple containers as a single service.
+"As we explore the practical applications of Docker, let's focus on how it can simplify setting up essential software infrastructure. Today, we'll look at a common scenario: setting up a Redis database, which is often used as a fast, in-memory data store for applications.
 
-Let’s take an example. Imagine you need to set up a development environment that includes a SQL Server, a Redis cache, and a RabbitMQ message broker. Normally, configuring these services individually would be time-consuming and prone to errors. With Docker, however, you can define each piece of your infrastructure in a `docker-compose.yml` file.
+First, what is a Docker container? It's like a small, self-contained computer system that has everything it needs to run a specific software application. This container ensures that the software behaves exactly the same way, no matter where or on what machine it runs.
 
-Here's a brief look at what such a file might contain:
-```yaml
-version: '3'
-services:
-  sqlserver:
-    image: microsoft/mssql-server-linux
-    environment:
-      SA_PASSWORD: "your_password"
-      ACCEPT_EULA: "Y"
-  redis:
-    image: redis
-  rabbitmq:
-    image: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+Let's consider setting up Redis. Normally, installing Redis might involve downloading the software, configuring it on your system, and making sure it doesn’t interfere with other installed software. With Docker, this process is much simpler.
+
+Here’s the command to start a Redis server using Docker:
+```bash
+docker run --name my-redis -d redis
 ```
+Let’s break this down:
+- `docker run` starts a new container.
+- `--name my-redis` gives a name to our container, making it easier to refer to.
+- `-d` tells Docker to run the container in the background.
+- `redis` specifies which image to use—here, we're using the official Redis image from Docker Hub.
 
-With this file, setting up your entire infrastructure is as simple as running the command `docker-compose up`. This command pulls the necessary Docker images, creates the containers, and sets them up to communicate with each other. Each service is isolated, but can interact as defined, in a network automatically created by Docker Compose.
+By running this command, Docker will download the Redis image if it’s not already available on your machine, and start a Redis server in a container. This container is completely isolated from other software on your system, ensuring no conflicts or issues.
 
-The benefits are clear:
-- **Consistency:** Every developer on the team uses the exact same environment, which eliminates 'works on my machine' problems.
-- **Speed:** You can spin up this entire environment in minutes, if not seconds, which is a game changer for productivity.
-- **Isolation:** Each component runs in its own container, ensuring that it doesn’t interfere with the host or other services unless explicitly configured to do so.
+The benefits here are clear:
+- **Simplicity:** You just saw how a single command sets up Redis, ready to use.
+- **Consistency:** Every developer who runs this command gets the exact same Redis setup.
+- **Isolation:** The Redis server runs in its own space, without impacting other applications.
 
-In summary, Docker not only simplifies the deployment of applications but also the entire process of setting up and managing development environments. This makes it an invaluable tool for developers looking to increase efficiency and consistency in their workflow."
+This example shows how Docker can make managing development environments far less complicated, allowing developers to focus on their code rather than on configuring their tools."
 
+Also lets add one more example of creating sql server image and running it with volume attached:
+```bash
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Qwerty1$" -p 1433:1433 -v sqlvolume:/var/opt/mssql --name testSql mcr.microsoft.com/mssql/server:2022-latest
+```
 ---

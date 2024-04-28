@@ -23,7 +23,7 @@
 - **Title:** One Command Setup
 - **Bullet Points:**
     - Demonstrate how to set up SQL Server, Redis, RabbitMQ, etc., using Docker
-    - Show a simple Docker Compose file example
+    - Show a simple Docker file example
 
 #### Slide 5: Benefits of Using Docker
 - **Title:** Key Benefits of Docker for Developers
