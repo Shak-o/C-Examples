@@ -1,0 +1,49 @@
+﻿@using global::Infrastructure.Shared.Services
+@using MediatR
+@using TaskManager.Client.Helpers
+@using TaskManager.Client.Components.Pages
+@inherits LayoutComponentBase
+@inject IHttpContextAccessor HttpContextAccessor;
+@inject ITokenValidator TokenValidator;
+@inject NavigationManager NavManager;
+<div>
+    @if (_isLoggedIn)
+    {
+        <NavMenu/>
+    }
+
+
+    @if (!_isLoggedIn && !NavManager.Uri.Contains("Registration", StringComparison.OrdinalIgnoreCase))
+    {
+        <Login/>
+    }
+    else
+    {
+        @Body
+    }
+
+</div>
+
+@code
+{
+    private bool _isLoggedIn = false;
+
+    protected override void OnInitialized()
+    {
+        _isLoggedIn = IsUserLoggedIn();
+    }
+
+    private bool IsUserLoggedIn()
+    {
+        if (HttpContextAccessor.HttpContext == null)
+            return false;
+
+        var authCookie = HttpContextAccessor.HttpContext.Request.GetCookie();
+
+        if (string.IsNullOrEmpty(authCookie))
+            return false;
+
+        var checkResult = TokenValidator.ValidateToken(authCookie, "TaskManager.Client");
+        return checkResult;
+    }
+}

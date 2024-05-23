@@ -1,0 +1,80 @@
+﻿@page "/usermanager"
+@using global::UserManager.Application.ViewModels
+@using global::UserManager.Domain.Models
+@using global::UserManager.Infrastructure.ApiClients
+@inject IUserManagerApi ApiClient;
+@rendermode InteractiveServer
+
+<div class="user-management-container">
+    <h1>User Management</h1>
+    <table class="users-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>Status</th>
+            <th>AccountId</th>
+            <th>ValidTill</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in _usersList)
+        {
+            <tr>
+                <td>@user.UserId</td>
+                <td>@user.Name</td>
+                <td>@user.SurName</td>
+                <td>@user.Email</td>
+                <td>@user.Username</td>
+                <td>@user.Status</td>
+                <td>@user.AccountId</td>
+                <td>@user.ValidTill</td>
+                <td>
+                    <button type="button" class="btn btn-status" @onclick="async () =>await ChangeStatus(user.AccountId)">@("Change to " + (user.Status == AccountStatus.Active ? "Inactive" : "Active"))</button>
+                    <button class="btn btn-delete">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <div class="pagination">
+        <a href="#" class="page-link">« Prev</a>
+        <a href="#" class="page-link">1</a>
+        <a href="#" class="page-link">2</a>
+        <a href="#" class="page-link">3</a>
+        <a href="#" class="page-link">Next »</a>
+    </div>
+</div>
+
+@code {
+    private List<UserViewModel> _usersList = new List<UserViewModel>();
+    private int _currentPage = 0;
+    private bool _haveUpdates = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var cancellationToken = new CancellationToken();
+        _usersList = await ApiClient.GetUserListAsync(_currentPage, cancellationToken).ConfigureAwait(false); ;
+    }
+
+    public async Task ChangeStatus(int accountId)
+    {
+        var cancellationToken = new CancellationToken();
+        _haveUpdates =  await ApiClient.UpdateStatusAsync(accountId, cancellationToken);
+        var updatedAccount = _usersList.First(x => x.AccountId == accountId);
+        var newStatus = updatedAccount.Status == AccountStatus.Active ? AccountStatus.Blocked : AccountStatus.Active;
+        updatedAccount.Status = newStatus;
+        await InvokeAsync(() =>
+        {
+            if (_haveUpdates)
+                StateHasChanged();
+        });
+    }
+    
+   
+}

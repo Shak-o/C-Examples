@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Shared\JiraTwo.ServiceDefaults\JiraTwo.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\..\..\Shared\Presentation.Shared\Presentation.Shared.csproj" />
+      <ProjectReference Include="..\..\Core\TaskManager.Application\TaskManager.Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\TaskManager.Infrastructure\TaskManager.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\" />
+    </ItemGroup>
+
+</Project>

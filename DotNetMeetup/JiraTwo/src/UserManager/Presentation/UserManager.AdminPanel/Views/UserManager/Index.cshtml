@@ -1,0 +1,64 @@
+﻿@using UserManager.Application.ViewModels
+@model List<UserViewModel>
+@{
+ViewData["Title"] = "Home Page";
+}
+<header>
+    <div class="nav-links">
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            Home
+        </a>
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+            UserManager
+        </a>
+    </div>
+    <div class="nav-right">
+        <a class="nav-link" href="/Logout">Logout</a>
+    </div>
+</header>
+
+<div class="user-management-container">
+    <h1>User Management</h1>
+    <table class="users-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>Status</th>
+            <th>AccountId</th>
+            <th>ValidTill</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+        <tr>
+            <td>@user.UserId</td>
+            <td>@user.Name</td>
+            <td>@user.SurName</td>
+            <td>@user.Email</td>
+            <td>@user.Username</td>
+            <td>@user.Status</td>
+            <td>@user.AccountId</td>
+            <td>@user.ValidTill</td>
+            <td>
+                <button type="button" class="btn btn-status">Update</button>
+                <button class="btn btn-delete">Delete</button>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a href="#" class="page-link">« Prev</a>
+        <a href="#" class="page-link">1</a>
+        <a href="#" class="page-link">2</a>
+        <a href="#" class="page-link">3</a>
+        <a href="#" class="page-link">Next »</a>
+    </div>
+</div>

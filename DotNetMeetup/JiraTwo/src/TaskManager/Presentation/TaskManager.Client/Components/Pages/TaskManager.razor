@@ -1,0 +1,89 @@
+﻿@page "/taskmanager"
+@using global::TaskManager.Application.ApiClientInterfaces
+@using global::TaskManager.Domain.ViewModels
+@using global::TaskManager.Infrastructure.ApiClients
+@using TaskStatus = global::TaskManager.Domain.Models.TaskStatus
+@inject ITaskManagerClientWrapper TaskManagerApi;
+@rendermode InteractiveServer
+
+<div class="user-management-container">
+    <h1>Task Management</h1>
+    <table class="users-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Assignee</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var task in _taskList)
+        {
+            <tr>
+                <td>@task.Id</td>
+                <td>@task.TaskType</td>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+                <td>@task.Status</td>
+                <td>@task.AssigneeName</td>
+                <td>
+                    <button type="button" class="btn btn-status" @onclick="async () =>await ChangeStatus(task.Id)">@("Change to " + (GetNextStatus(task.Id)))</button>
+                    <button class="btn btn-delete">Delete</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <div class="pagination">
+        <a href="#" class="page-link">« Prev</a>
+        <a href="#" class="page-link">1</a>
+        <a href="#" class="page-link">2</a>
+        <a href="#" class="page-link">3</a>
+        <a href="#" class="page-link">Next »</a>
+    </div>
+</div>
+
+@code {
+    private List<TaskViewModel> _taskList = new ();
+    private int _currentPage = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _taskList = await TaskManagerApi.GetTasksAsync(new CancellationToken());
+    }
+
+    public async Task ChangeStatus(int taskId)
+    {
+        await TaskManagerApi.UpdateTaskAsync(taskId);
+        var updated = _taskList.First(x => x.Id == taskId);
+        updated.Status = updated.Status switch
+        {
+            TaskStatus.Open => TaskStatus.InProgress,
+            TaskStatus.InProgress => TaskStatus.Done,
+            TaskStatus.Done => TaskStatus.InProgress,
+            _ => TaskStatus.Open
+        };
+        StateHasChanged();
+    }
+
+    public string GetNextStatus(int id)
+    {
+        var selectedTask = _taskList.FirstOrDefault(x => x.Id == id);
+        if (selectedTask == null)
+            return "";
+
+        var toReturn = selectedTask.Status switch
+        {
+            TaskStatus.Open => "In Progress",
+            TaskStatus.InProgress => "Done",
+            TaskStatus.Done => "Open",
+            _ => string.Empty
+        };
+        return toReturn;
+    }
+}

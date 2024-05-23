@@ -1,0 +1,119 @@
+services:
+  messaging:
+    container_name: "messaging"
+    image: "docker.io/library/rabbitmq:3.13-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "HbQ0zrrcn5uM2TIJU1J!Je"
+    ports:
+    - target: 5672
+      published: 5672
+    - target: 15672
+      published: 15672
+    restart: unless-stopped
+  SqlServer:
+    container_name: "SqlServer"
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "test"
+    volumes:
+    - "volumemount-sqlserver-data:/var/opt/mssql"
+    ports:
+    - target: 1433
+      published: 1448
+    restart: unless-stopped
+  userManagerApi:
+    container_name: "userManagerApi"
+    image: "usermanagerapi:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      ConnectionStrings__UserManagerDb: "Server=SqlServer,1448;User ID=sa;Password=test;TrustServerCertificate=true;Database=UserManagerDb"
+      ConnectionStrings__messaging: "amqp://guest:HbQ0zrrcn5uM2TIJU1J!Je@messaging:5672"
+      QueueName: "test"
+      RoutingKey: "test"
+      ExchangeName: "test"
+      SigningKeySecret: "test"
+    ports:
+    - target: 8080
+      published: 10000
+    - target: 8443
+      published: 10001
+    restart: unless-stopped
+  userManagerAdmin:
+    container_name: "userManagerAdmin"
+    image: "usermanageradmin:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      services__userManagerApi__http__0: "http://userManagerApi:8080"
+      SigningKeySecret: "test"
+    ports:
+    - target: 8080
+      published: 10002
+    - target: 8443
+      published: 10003
+    restart: unless-stopped
+  taskManagerApi:
+    container_name: "taskManagerApi"
+    image: "taskmanagerapi:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      ConnectionStrings__TaskManagerDb: "Server=SqlServer,1448;User ID=sa;Password=test;TrustServerCertificate=true;Database=TaskManagerDb"
+      ConnectionStrings__messaging: "amqp://guest:HbQ0zrrcn5uM2TIJU1J!Je@messaging:5672"
+      services__userManagerApi__http__0: "http://userManagerApi:8080"
+      QueueName: "test"
+      RoutingKey: "test"
+      ExchangeName: "test"
+      SigningKeySecret: "test"
+    ports:
+    - target: 8080
+      published: 10004
+    - target: 8443
+      published: 10005
+    restart: unless-stopped
+  taskManagerClient:
+    container_name: "taskManagerClient"
+    image: "taskmanagerclient:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      services__taskManagerApi__http__0: "http://taskManagerApi:8080"
+      services__userManagerApi__http__0: "http://userManagerApi:8080"
+      SigningKeySecret: "test"
+    ports:
+    - target: 8080
+      published: 10006
+    - target: 8443
+      published: 10007
+    restart: unless-stopped
+  userManagerMigrationsService:
+    container_name: "userManagerMigrationsService"
+    image: "usermanagermigrationsservice:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ConnectionStrings__UserManagerDb: "Server=SqlServer,1448;User ID=sa;Password=test;TrustServerCertificate=true;Database=UserManagerDb"
+    restart: unless-stopped
+  taskManagerMigrationsService:
+    container_name: "taskManagerMigrationsService"
+    image: "taskmanagermigrationsservice:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ConnectionStrings__TaskManagerDb: "Server=SqlServer,1448;User ID=sa;Password=test;TrustServerCertificate=true;Database=TaskManagerDb"
+    restart: unless-stopped
+volumes:
+  volumemount-sqlserver-data: {}
