@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3EEC29F9-BD4C-4C5B-9968-C33C5429C4E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.Api", "src\SignalRDemo.Api\SignalRDemo.Api.csproj", "{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.Client", "src\SignalRDemo.Client\SignalRDemo.Client.csproj", "{3C7B4D02-D06E-403A-AA98-AD34DE6E677B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{9341FA85-2251-4997-A1EB-ED7E63F83B70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.ServiceDefaults", "src\SignalRDemo.ServiceDefaults\SignalRDemo.ServiceDefaults.csproj", "{6BADDE84-DC55-4B13-89FA-A3AF5038FDB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.AppHost", "src\SignalRDemo.AppHost\SignalRDemo.AppHost.csproj", "{C3B5A6F5-2FFF-4B86-89BC-659D95F199CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C7B4D02-D06E-403A-AA98-AD34DE6E677B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C7B4D02-D06E-403A-AA98-AD34DE6E677B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C7B4D02-D06E-403A-AA98-AD34DE6E677B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C7B4D02-D06E-403A-AA98-AD34DE6E677B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BADDE84-DC55-4B13-89FA-A3AF5038FDB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BADDE84-DC55-4B13-89FA-A3AF5038FDB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BADDE84-DC55-4B13-89FA-A3AF5038FDB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BADDE84-DC55-4B13-89FA-A3AF5038FDB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3B5A6F5-2FFF-4B86-89BC-659D95F199CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3B5A6F5-2FFF-4B86-89BC-659D95F199CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3B5A6F5-2FFF-4B86-89BC-659D95F199CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3B5A6F5-2FFF-4B86-89BC-659D95F199CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756} = {3EEC29F9-BD4C-4C5B-9968-C33C5429C4E6}
+		{3C7B4D02-D06E-403A-AA98-AD34DE6E677B} = {3EEC29F9-BD4C-4C5B-9968-C33C5429C4E6}
+		{9341FA85-2251-4997-A1EB-ED7E63F83B70} = {3EEC29F9-BD4C-4C5B-9968-C33C5429C4E6}
+		{6BADDE84-DC55-4B13-89FA-A3AF5038FDB0} = {9341FA85-2251-4997-A1EB-ED7E63F83B70}
+		{C3B5A6F5-2FFF-4B86-89BC-659D95F199CC} = {9341FA85-2251-4997-A1EB-ED7E63F83B70}
+	EndGlobalSection
+EndGlobal

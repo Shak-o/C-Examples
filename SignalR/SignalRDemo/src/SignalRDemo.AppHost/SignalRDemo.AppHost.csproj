@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsAspireHost>true</IsAspireHost>
+        <UserSecretsId>112040FB-4467-4D3B-80F9-F08B524C8D3D</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SignalRDemo.Api\SignalRDemo.Api.csproj" />
+      <ProjectReference Include="..\SignalRDemo.Client\SignalRDemo.Client.csproj" />
+    </ItemGroup>
+
+</Project>
