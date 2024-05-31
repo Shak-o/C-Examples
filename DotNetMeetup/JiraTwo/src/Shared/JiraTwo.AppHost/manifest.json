@@ -1,0 +1,253 @@
+{
+  "resources": {
+    "messaging": {
+      "type": "container.v0",
+      "connectionString": "amqp://guest:{messaging-password.value}@{messaging.bindings.tcp.host}:{messaging.bindings.tcp.port}",
+      "image": "docker.io/library/rabbitmq:3.13-management",
+      "env": {
+        "RABBITMQ_DEFAULT_USER": "guest",
+        "RABBITMQ_DEFAULT_PASS": "{messaging-password.value}"
+      },
+      "bindings": {
+        "tcp": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "targetPort": 5672
+        },
+        "management": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http",
+          "targetPort": 15672
+        }
+      }
+    },
+    "QueueName": {
+      "type": "parameter.v0",
+      "value": "{QueueName.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "RoutingKey": {
+      "type": "parameter.v0",
+      "value": "{RoutingKey.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "ExchangeName": {
+      "type": "parameter.v0",
+      "value": "{ExchangeName.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "SigningKey": {
+      "type": "parameter.v0",
+      "value": "{SigningKey.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "SqlServerPassword": {
+      "type": "parameter.v0",
+      "value": "{SqlServerPassword.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true
+        }
+      }
+    },
+    "SqlServer": {
+      "type": "container.v0",
+      "connectionString": "Server={SqlServer.bindings.tcp.host},{SqlServer.bindings.tcp.port};User ID=sa;Password={SqlServerPassword.value};TrustServerCertificate=true",
+      "image": "mcr.microsoft.com/mssql/server:2022-latest",
+      "volumes": [
+        {
+          "name": "VolumeMount.sqlserver.data",
+          "target": "/var/opt/mssql",
+          "readOnly": false
+        }
+      ],
+      "env": {
+        "ACCEPT_EULA": "Y",
+        "MSSQL_SA_PASSWORD": "{SqlServerPassword.value}"
+      },
+      "bindings": {
+        "tcp": {
+          "scheme": "tcp",
+          "protocol": "tcp",
+          "transport": "tcp",
+          "port": 1448,
+          "targetPort": 1433
+        }
+      }
+    },
+    "UserManagerDb": {
+      "type": "value.v0",
+      "connectionString": "{SqlServer.connectionString};Database=UserManagerDb"
+    },
+    "TaskManagerDb": {
+      "type": "value.v0",
+      "connectionString": "{SqlServer.connectionString};Database=TaskManagerDb"
+    },
+    "userManagerApi": {
+      "type": "project.v0",
+      "path": "../../UserManager/Presentation/UserManager.Api/UserManager.Api.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "ConnectionStrings__UserManagerDb": "{UserManagerDb.connectionString}",
+        "ConnectionStrings__messaging": "{messaging.connectionString}",
+        "QueueName": "{QueueName.value}",
+        "RoutingKey": "{RoutingKey.value}",
+        "ExchangeName": "{ExchangeName.value}",
+        "SigningKeySecret": "{SigningKey.value}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "userManagerAdmin": {
+      "type": "project.v0",
+      "path": "../../UserManager/Presentation/UserManager.Admin/UserManager.Admin.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "services__userManagerApi__http__0": "{userManagerApi.bindings.http.url}",
+        "services__userManagerApi__https__0": "{userManagerApi.bindings.https.url}",
+        "SigningKeySecret": "{SigningKey.value}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "taskManagerApi": {
+      "type": "project.v0",
+      "path": "../../TaskManager/Presentation/TaskManager.Api/TaskManager.Api.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "ConnectionStrings__TaskManagerDb": "{TaskManagerDb.connectionString}",
+        "ConnectionStrings__messaging": "{messaging.connectionString}",
+        "services__userManagerApi__http__0": "{userManagerApi.bindings.http.url}",
+        "services__userManagerApi__https__0": "{userManagerApi.bindings.https.url}",
+        "QueueName": "{QueueName.value}",
+        "RoutingKey": "{RoutingKey.value}",
+        "ExchangeName": "{ExchangeName.value}",
+        "SigningKeySecret": "{SigningKey.value}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "taskManagerClient": {
+      "type": "project.v0",
+      "path": "../../TaskManager/Presentation/TaskManager.Client/TaskManager.Client.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "true",
+        "services__taskManagerApi__http__0": "{taskManagerApi.bindings.http.url}",
+        "services__taskManagerApi__https__0": "{taskManagerApi.bindings.https.url}",
+        "services__userManagerApi__http__0": "{userManagerApi.bindings.http.url}",
+        "services__userManagerApi__https__0": "{userManagerApi.bindings.https.url}",
+        "SigningKeySecret": "{SigningKey.value}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "userManagerMigrationsService": {
+      "type": "project.v0",
+      "path": "../../UserManager/Infrastructure/UserManager.MigrationsService/UserManager.MigrationsService.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ConnectionStrings__UserManagerDb": "{UserManagerDb.connectionString}"
+      }
+    },
+    "taskManagerMigrationsService": {
+      "type": "project.v0",
+      "path": "../../TaskManager/Infrastructure/TaskManager.MigrationService/TaskManager.MigrationService.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY": "in_memory",
+        "ConnectionStrings__TaskManagerDb": "{TaskManagerDb.connectionString}"
+      }
+    },
+    "messaging-password": {
+      "type": "parameter.v0",
+      "value": "{messaging-password.inputs.value}",
+      "inputs": {
+        "value": {
+          "type": "string",
+          "secret": true,
+          "default": {
+            "generate": {
+              "minLength": 22,
+              "special": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

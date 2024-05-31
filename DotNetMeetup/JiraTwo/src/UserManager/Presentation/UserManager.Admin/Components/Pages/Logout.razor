@@ -1,0 +1,15 @@
+﻿@page "/logout"
+@using global::UserManager.Admin.Helpers
+
+
+@code {
+    [CascadingParameter] 
+    public HttpContext? HttpContext { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        HttpContext?.Response.Cookies.Delete("AuthToken");
+        HttpContext?.RedirectTo("/");
+        base.OnInitialized();
+    }
+}

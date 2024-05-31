@@ -1,0 +1,85 @@
+﻿@page "/Registration"
+@using System.Text.Json
+@using global::TaskManager.Client.RequestModels
+@using global::TaskManager.Infrastructure.ApiClients
+@using global::TaskManager.Infrastructure.RequestModels
+@using Presentation.Shared.Exceptions
+@using RestEase
+@inject IAuthManagerClient AuthManager;
+@inject NavigationManager NavManager;
+
+<div class="registration-container">
+    <EditForm method="POST" class="registration-form" FormName="Register" Model="Model" OnValidSubmit="async () => await HandleRegistrationAsync()">
+        <ValidationSummary />
+        @if (errorMessages != null && errorMessages.Count != 0)
+        {
+            foreach (var error in errorMessages)
+            {
+                <div class="error-message">
+                    @error
+                </div>
+            }
+        }
+        <h2 class="form-title">Register</h2>
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <InputText @bind-Value="Model.UserName" type="text"  class="form-input" required/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <InputText @bind-Value="Model.Password" type="password" class="form-input" required/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">First Name</label>
+            <InputText @bind-Value="Model.Name" type="text" class="form-input" required/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <InputText @bind-Value="Model.LastName" type="text" class="form-input" required/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email (optional)</label>
+            <InputText @bind-Value="Model.Email" type="email" class="form-input"/>
+        </div>
+        <button type="submit" class="submit-btn">Register</button>
+    </EditForm>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public RegistrationPageModel? Model { get; set; }
+    private List<string> errorMessages { get; set; }
+    protected override void OnInitialized()
+    {
+        Model ??= new RegistrationPageModel();
+        errorMessages ??= new List<string>();
+    }
+
+    private async Task HandleRegistrationAsync()
+    {
+        try
+        {
+            if (Model == null)
+                return;
+            var request = new CreateAccountRequest
+            {
+                UserName = Model.UserName,
+                Password = Model.Password,
+                Name = Model.Name,
+                LastName = Model.LastName,
+                Email = Model.Email,
+                AccountType = AccountType.Normal
+            };
+            var cancellationToken = new CancellationToken();
+
+            await AuthManager.CreateAccountAsync(request, cancellationToken);
+            NavManager.NavigateTo("/");
+        }
+        catch (ApiException exception)
+        {
+            var convert = JsonSerializer.Deserialize<ExceptionResponseModel>(exception.Content);
+            
+            errorMessages.Add($"{convert.Title} {convert.Description}");
+        }
+    }
+}

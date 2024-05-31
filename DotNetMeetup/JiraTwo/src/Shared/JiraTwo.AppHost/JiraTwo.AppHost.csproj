@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsAspireHost>true</IsAspireHost>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.0-preview.7.24251.11" />
+        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="8.0.0-preview.7.24251.11" />
+        <PackageReference Include="Aspire.Hosting.SqlServer" Version="8.0.0-preview.7.24251.11" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\TaskManager\Infrastructure\TaskManager.MigrationService\TaskManager.MigrationService.csproj" />
+      <ProjectReference Include="..\..\TaskManager\Presentation\TaskManager.Api\TaskManager.Api.csproj" />
+      <ProjectReference Include="..\..\TaskManager\Presentation\TaskManager.Client\TaskManager.Client.csproj" />
+      <ProjectReference Include="..\..\UserManager\Infrastructure\UserManager.MigrationsService\UserManager.MigrationsService.csproj" />
+      <ProjectReference Include="..\..\UserManager\Presentation\UserManager.Admin\UserManager.Admin.csproj" />
+      <ProjectReference Include="..\..\UserManager\Presentation\UserManager.Api\UserManager.Api.csproj" />
+    </ItemGroup>
+
+</Project>

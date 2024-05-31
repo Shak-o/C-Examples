@@ -1,0 +1,73 @@
+﻿@using global::TaskManager.Client.RequestModels
+@using global::TaskManager.Client.Services
+@using global::TaskManager.Infrastructure.ApiClients
+@using global::TaskManager.Infrastructure.RequestModels
+@using RestEase
+@inject IAuthManagerClient AuthManager;
+@inject IHttpContextWrapper HttpContextWrapper;
+@inject ILogger<Login> Logger;
+@inject NavigationManager NavManager;
+
+<div class="center-login-box">
+    <div class="login-container">
+        <h1>Login</h1>
+
+        <form method="post" @onsubmit="HandleLogin" @formname="Auth">
+            <AntiforgeryToken/>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <InputText @bind-Value="Model.UserName"/>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <InputText @bind-Value="Model.Password" type="password"/>
+            </div>
+            <button type="submit" class="login-buttons">Login</button>
+            <a type="button" class="login-buttons" href="/Registration">Register</a>
+        </form>
+    </div>
+</div>
+
+@code { 
+    [SupplyParameterFromForm]
+    public AuthenticatePageModel? Model { get; set; }
+    
+    protected override void OnInitialized() => Model ??= new()
+    {
+        UserName = string.Empty,
+        Password = string.Empty,
+        AccountType = AccountType.Normal
+    };
+    
+    private async Task HandleLogin()
+    {
+        try
+        {
+            var context = HttpContextWrapper.GetHttpContext();
+            var cancellation = new CancellationToken();
+            Model!.AccountType = AccountType.Normal;
+            var authRequest = new AuthenticateUsernamePassRequest
+            {
+                UserName = Model.UserName,
+                Password = Model.Password,
+                AccountType = Model.AccountType
+            };
+            var token = await AuthManager.AuthenticateByUserNameAndPasswordAsync(authRequest, cancellation).ConfigureAwait(false);
+            
+            if (context == null)
+                throw new ApplicationException("Error happened");
+            
+            context.Response.Cookies.Append("AuthToken", token);
+            NavManager.NavigateTo("/");
+        }
+        catch (ApiException exception)
+        {
+            Logger.LogError(exception, exception.Content);
+        }
+    }
+
+    public void RedirectToRegister()
+    {
+        NavManager.NavigateTo("/Registration");
+    }
+}

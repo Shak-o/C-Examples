@@ -1,0 +1,49 @@
+﻿@using global::Infrastructure.Shared.Services
+@using MediatR
+@using UserManager.Admin.Components.Pages
+@using UserManager.Admin.Helpers
+@inherits LayoutComponentBase
+@inject IHttpContextAccessor HttpContextAccessor;
+@inject ITokenValidator TokenValidator;
+
+<div>
+    @if (_isLoggedIn)
+    {
+        <NavMenu/>
+    }
+
+
+    @if (!_isLoggedIn)
+    {
+        <Login/>
+    }
+    else
+    {
+        @Body
+    }
+
+</div>
+
+@code
+{
+    private bool _isLoggedIn = false;
+
+    protected override void OnInitialized()
+    {
+        _isLoggedIn = IsUserLoggedIn();
+    }
+
+    private bool IsUserLoggedIn()
+    {
+        if (HttpContextAccessor.HttpContext == null)
+            return false;
+
+        var authCookie = HttpContextAccessor.HttpContext.Request.GetCookie();
+
+        if (string.IsNullOrEmpty(authCookie))
+            return false;
+
+        var checkResult = TokenValidator.ValidateToken(authCookie, "UserManager.Admin");
+        return checkResult;
+    }
+}

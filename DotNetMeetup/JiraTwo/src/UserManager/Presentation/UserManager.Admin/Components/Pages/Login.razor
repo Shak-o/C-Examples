@@ -1,0 +1,84 @@
+﻿@using System.Text.Json
+@using Presentation.Shared.Exceptions
+@using global::UserManager.Admin.Helpers
+@using global::UserManager.Application.Commands.AuthCommands
+@using global::UserManager.Domain.Models
+@using global::UserManager.Infrastructure.ApiClients
+@using RestEase
+@using ApplicationException = Presentation.Shared.Exceptions.ApplicationException
+@inject IUserManagerApi UserManager;
+@inject ILogger<Login> Logger;
+@inject NavigationManager NavManager;
+
+<div class="center-login-box">
+    <div class="login-container">
+        @if (errorMessages != null && errorMessages.Count != 0)
+        {
+            foreach (var error in errorMessages)
+            {
+                <div class="error-message">
+                    @error
+                </div>
+            }
+        }
+        <h1>Login</h1>
+    
+        <EditForm method="post" OnValidSubmit="HandleLogin" FormName="Auth" Model="Model" Enhance>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <InputText @bind-Value="Model.UserName"/>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <InputText @bind-Value="Model.Password" type="password"/>
+            </div>
+            <button type="submit">Login</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] 
+    public HttpContext? HttpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    public AuthenticateUsernamePassRequest? Model { get; set; }
+
+    private List<string> errorMessages { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Model ??= new()
+        {
+            UserName = string.Empty,
+            Password = string.Empty,
+            AccountType = AccountType.Admin
+        };
+
+        errorMessages = new List<string>();
+    }
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            errorMessages.Clear();
+            var cancellation = new CancellationToken();
+            Model.AccountType = AccountType.Admin;
+
+            var token = await UserManager.AuthenticateByUserNameAndPasswordAsync(Model, cancellation).ConfigureAwait(false);
+            if (HttpContext == null)
+                throw new ApplicationException("Error happened", "Unexpected error");
+
+            HttpContext.Response.Cookies.Append("AuthToken", token);
+            HttpContext.RedirectTo("/usermanager");
+
+        }
+        catch (ApiException exception)
+        {
+            Logger.LogError(exception, exception.Content);
+            var deserialized = JsonSerializer.Deserialize<ExceptionResponseModel>(exception.Content);
+            errorMessages.Add(deserialized?.Title ?? "Unexpected error");
+        }
+    }
+}
