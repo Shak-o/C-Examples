@@ -44,6 +44,16 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+@* <script> *@
+@*     var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7279/test").build(); *@
+@* *@
+@*     connection.on("DoDaThing", function (guid) { *@
+@*         console.log(guid) *@
+@*     }); *@
+@* *@
+@*     connection.start(); *@
+@* </script> *@
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

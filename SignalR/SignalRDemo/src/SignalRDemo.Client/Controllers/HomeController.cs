@@ -1,20 +1,24 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SignalRDemo.Client.Models;
+using SignalRDemo.Client.Services;
 
 namespace SignalRDemo.Client.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private IHubConnectionAccessor _connectionAccessor;
+    public HomeController(ILogger<HomeController> logger, IHubConnectionAccessor connectionAccessor)
     {
         _logger = logger;
+        _connectionAccessor = connectionAccessor;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        var res = await _connectionAccessor.Configure();
+        ViewBag.Test = res;
         return View();
     }
 

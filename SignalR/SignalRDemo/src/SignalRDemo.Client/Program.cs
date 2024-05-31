@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.SignalR.Client;
+using SignalRDemo.Client.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.AddServiceDefaults();
-
+builder.Services.AddSingleton<IHubConnectionAccessor, HubConnectionAccessor>();
 var app = builder.Build();
 app.MapDefaultEndpoints();
 // Configure the HTTP request pipeline.
