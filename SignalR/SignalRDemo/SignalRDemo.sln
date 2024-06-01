@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3EEC29F9-BD4C-4C5B-9968-C33C5429C4E6}"
+	ProjectSection(SolutionItems) = preProject
+		..\Docs\Hosting.md = ..\Docs\Hosting.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.Api", "src\SignalRDemo.Api\SignalRDemo.Api.csproj", "{EF6A05DC-2EED-4011-BFF5-CC44EE8C4756}"
 EndProject
