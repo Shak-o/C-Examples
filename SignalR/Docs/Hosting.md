@@ -1,0 +1,3 @@
+1) Sticky Sessions - we either enable sticky sessions or configure all clients to only use WebSockets, and set SkipNegotiation = true with clients
+2) SignalR holds TCP connections so adding SignalR to heavily loaded api will most def cause problems
+3) As in cloud usually we have multiple application pods, we will need to use RedisBackplane so that all new SignalR servers will understand whers going what. 
