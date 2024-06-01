@@ -47,8 +47,10 @@
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const url = "@ViewBag.ApiUrl" +"/test?sessionId=" + "@ViewBag.SessionId";
+        console.log(url)
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7279/test")
+            .withUrl(url)
             .build();
 
         connection.on("DoDaThing", function (message) {

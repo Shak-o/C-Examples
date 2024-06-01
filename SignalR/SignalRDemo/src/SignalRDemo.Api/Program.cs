@@ -9,13 +9,15 @@ builder.AddServiceDefaults();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.AddRedisClient("redis");
 
+var clientUrl = builder.Configuration["services:client:https:0"]!;
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         opt =>
         {
-            opt.WithOrigins("https://localhost:7286")
+            opt.WithOrigins(clientUrl)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -28,7 +30,7 @@ var webSocketOptions = new WebSocketOptions
     KeepAliveInterval = TimeSpan.FromMinutes(2)
 };
 
-webSocketOptions.AllowedOrigins.Add("https://localhost:7286");
+webSocketOptions.AllowedOrigins.Add(clientUrl);
 
 
 var app = builder.Build();
