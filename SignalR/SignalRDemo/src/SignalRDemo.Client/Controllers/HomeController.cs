@@ -8,18 +8,28 @@ namespace SignalRDemo.Client.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private IHubConnectionAccessor _connectionAccessor;
-    public HomeController(ILogger<HomeController> logger, IHubConnectionAccessor connectionAccessor)
+    //private HubConnectionAccessor _connectionAccessor;
+    public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-        _connectionAccessor = connectionAccessor;
+        // _connectionAccessor = connectionAccessor;
+        // _connectionAccessor.OnMessageReceived += s =>
+        // {
+        //     ViewBag.Test = s;
+        // };
     }
 
     public async Task<IActionResult> Index()
     {
-        var res = await _connectionAccessor.Configure();
-        ViewBag.Test = res;
+        //await _connectionAccessor.StartConnection();
         return View();
+    }
+
+    [HttpGet("/test")]
+    public IActionResult Test([FromQuery]string message)
+    {
+        ViewBag.Test = message;
+        return View("Index");
     }
 
     public IActionResult Privacy()

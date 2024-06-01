@@ -2,5 +2,5 @@
 
 public interface IHubConnectionAccessor
 {
-    Task<string> Configure();
+    Task StartConnection();
 }
