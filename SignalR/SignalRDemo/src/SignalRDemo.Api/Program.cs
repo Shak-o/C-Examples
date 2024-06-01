@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.AddRedisClient("redis");
 
-var clientUrl = builder.Configuration["services:client:https:0"]!;
+var clientUrl = builder.Configuration["services:client:http:0"]!;
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -31,7 +31,7 @@ var webSocketOptions = new WebSocketOptions
 };
 
 webSocketOptions.AllowedOrigins.Add(clientUrl);
-
+Console.WriteLine("CLIENT URL->" + clientUrl);
 
 var app = builder.Build();
 

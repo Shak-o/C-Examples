@@ -18,7 +18,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         ViewBag.SessionId = Guid.NewGuid().ToString();
-        ViewBag.ApiUrl = _configuration["services:api:https:0"]!;
+        ViewBag.ApiUrl = _configuration["services:api:http:0"]!;
         return View();
     }
 
