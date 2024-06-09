@@ -6,22 +6,13 @@ using PatternExamples.ConsoleApp.Factory;
 using PatternExamples.ConsoleApp.Factory.Creators;
 
 var type = Console.ReadLine();
-EmployeeCreator creator;
-switch (type)
+var creator = type switch
 {
-    case "Developer":
-        creator = new DeveloperCreator();
-        break;
-    case "Tester":
-        creator = new TesterCreator();
-        break;
-    case "Analyst":
-        creator = new AnalystCreator();
-        break;
-    default:
-        creator = new EmployeeCreator();
-        break;
-}
+    "Developer" => new DeveloperCreator(),
+    "Tester" => new TesterCreator(),
+    "Analyst" => new AnalystCreator(),
+    _ => new EmployeeCreator()
+};
 
 var employee = creator.CreateEmployee("test", 23, 1);
 
