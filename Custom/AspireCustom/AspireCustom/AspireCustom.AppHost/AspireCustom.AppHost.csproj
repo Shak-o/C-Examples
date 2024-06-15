@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\AspireCustom.Lib\AspireCustom.Lib.csproj" IsAspireProjectResource="false"/>
         <ProjectReference Include="..\AspireCustom.ApiService\AspireCustom.ApiService.csproj"/>
         <ProjectReference Include="..\AspireCustom.Web\AspireCustom.Web.csproj"/>
     </ItemGroup>
