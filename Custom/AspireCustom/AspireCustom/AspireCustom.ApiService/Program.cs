@@ -1,3 +1,5 @@
+using AspireCustom.ServiceDefaults;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire components.
@@ -5,6 +7,11 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+
+builder.Services.AddHttpClient("test", x =>
+{
+    x.BaseAddress = new Uri("https://externalApi");
+});
 
 var app = builder.Build();
 
@@ -27,6 +34,15 @@ app.MapGet("/weatherforecast", () =>
             ))
         .ToArray();
     return forecast;
+});
+
+app.MapGet("test", async Task<string>(IHttpClientFactory clientFactory, IConfiguration configuration) =>
+{
+    //using var client = clientFactory.CreateClient("test");
+    using var client = new HttpClient();
+    client.BaseAddress = new Uri(configuration.GetConnectionString("ExternalApi"));
+    var res = await client.GetAsync("weatherforecast");
+    return await res.Content.ReadAsStringAsync();
 });
 
 app.MapDefaultEndpoints();

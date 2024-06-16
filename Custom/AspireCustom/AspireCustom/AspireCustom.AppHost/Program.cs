@@ -1,18 +1,16 @@
-using System.Net.Sockets;
 using AspireCustom.Lib;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache");
+var externalApi = builder.AddApi("ExternalApi");
 
-var apiService = builder.AddProject<Projects.AspireCustom_ApiService>("apiservice");
-
-var externalApi = builder.AddApi("test", "https://localhost:7112").WithEnvironment("env", "secret prolly");
+var apiService = builder.AddProject<Projects.AspireCustom_ApiService>("apiservice")
+    .WithReference(externalApi);
 
 builder.AddProject<Projects.AspireCustom_Web>("webfrontend")
     .WithExternalHttpEndpoints()
     .WithReference(cache)
-    .WithReference(apiService)
-    .WithReference(externalApi);
+    .WithReference(apiService);
 
 builder.Build().Run();
