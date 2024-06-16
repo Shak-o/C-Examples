@@ -10,7 +10,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddHttpClient("test", x =>
 {
-    x.BaseAddress = new Uri("https://externalApi");
+    x.BaseAddress = new Uri("https://ExternalApi");
 });
 
 var app = builder.Build();
@@ -38,9 +38,8 @@ app.MapGet("/weatherforecast", () =>
 
 app.MapGet("test", async Task<string>(IHttpClientFactory clientFactory, IConfiguration configuration) =>
 {
-    //using var client = clientFactory.CreateClient("test");
-    using var client = new HttpClient();
-    client.BaseAddress = new Uri(configuration.GetConnectionString("ExternalApi"));
+    using var client = clientFactory.CreateClient("test");
+    //using var client = new HttpClient();
     var res = await client.GetAsync("weatherforecast");
     return await res.Content.ReadAsStringAsync();
 });
