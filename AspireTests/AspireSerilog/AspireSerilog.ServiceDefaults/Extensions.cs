@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using Serilog;
 
-namespace Microsoft.Extensions.Hosting;
+namespace AspireSerilog.ServiceDefaults;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
 // This project should be referenced by each service project in your solution.
@@ -38,6 +39,10 @@ public static class Extensions
         //     options.AllowedSchemes = ["https"];
         // });
 
+        if (builder is WebApplicationBuilder webAppBuilder)
+        {
+            webAppBuilder.ConfigureHostForWebApps();
+        }
         return builder;
     }
 
@@ -114,5 +119,58 @@ public static class Extensions
         }
 
         return app;
+    }
+    
+    public static WebApplicationBuilder ConfigureHostForWebApps(this WebApplicationBuilder webApplicationBuilder)
+    {
+        var serviceName = webApplicationBuilder.Configuration["OTEL_SERVICE_NAME"];
+        var otelExporterEndpoint = webApplicationBuilder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+        var otelExporterHeaders = webApplicationBuilder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"];
+        var otelResourceAttributes = webApplicationBuilder.Configuration["OTEL_RESOURCE_ATTRIBUTES"];
+
+        if (!string.IsNullOrEmpty(otelExporterEndpoint) && (string.IsNullOrEmpty(serviceName) ||
+                                                            string.IsNullOrEmpty(otelExporterHeaders) ||
+                                                            string.IsNullOrEmpty(otelResourceAttributes)))
+            throw new InvalidOperationException("OTLP configurations missing");
+        
+        webApplicationBuilder.Host.UseSerilog((ctx, lc) =>
+        {
+            lc.WriteTo.Console();
+            
+            if (string.IsNullOrEmpty(otelExporterEndpoint))
+                return;
+            
+            lc.WriteTo.OpenTelemetry(options =>
+            {
+                options.Endpoint = otelExporterEndpoint;
+                var headers = otelExporterHeaders!.Split(',') ?? [];
+                foreach (var header in headers)
+                {
+                    var (key, value) = header.Split('=') switch
+                    {
+                        [{ } k, { } v] => (k, v),
+                        var v => throw new Exception($"Invalid header format {v}")
+                    };
+
+                    options.Headers.Add(key, value);
+                }
+
+                options.ResourceAttributes.Add("service.name", serviceName!);
+
+                //To remove the duplicate issue, we can use the below code to get the key and value from the configuration
+
+                var (otelResourceAttribute, otelResourceAttributeValue) =
+                   otelResourceAttributes!.Split('=') switch
+                    {
+                        [{ } k, { } v] => (k, v),
+                        _ => throw new Exception(
+                            $"Invalid header format {webApplicationBuilder.Configuration["OTEL_RESOURCE_ATTRIBUTES"]}")
+                    };
+
+                options.ResourceAttributes.Add(otelResourceAttribute, otelResourceAttributeValue);
+            });
+        });
+
+        return webApplicationBuilder;
     }
 }
