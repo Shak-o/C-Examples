@@ -1,3 +1,4 @@
+using AspireSerilog.Persistence;
 using AspireSerilog.ServiceDefaults;
 using Serilog;
 
@@ -17,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.AddServiceDefaults();
+builder.AddPersistence();
 
 var app = builder.Build();
 
