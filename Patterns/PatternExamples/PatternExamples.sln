@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternExamples.ConsoleApp", "PatternExamples.ConsoleApp\PatternExamples.ConsoleApp.csproj", "{6A761B58-00B5-4568-B87C-BD69E0FFB267}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternExamples.Structural", "PatternExamples.Structural\PatternExamples.Structural.csproj", "{889D23F5-49FD-42CA-9248-6248C356720E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{6A761B58-00B5-4568-B87C-BD69E0FFB267}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A761B58-00B5-4568-B87C-BD69E0FFB267}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A761B58-00B5-4568-B87C-BD69E0FFB267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{889D23F5-49FD-42CA-9248-6248C356720E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{889D23F5-49FD-42CA-9248-6248C356720E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{889D23F5-49FD-42CA-9248-6248C356720E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{889D23F5-49FD-42CA-9248-6248C356720E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
