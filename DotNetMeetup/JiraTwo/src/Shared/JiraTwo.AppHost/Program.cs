@@ -15,7 +15,10 @@ var signingKey = builder.AddParameter("SigningKey", secret: true);
 // SQL Server setup
 var sqlServerPassword = builder.AddParameter("SqlServerPassword", secret: true);
 var sqlServer = builder.AddSqlServer("SqlServer", sqlServerPassword, 1448)
-    .WithDataVolume("VolumeMount.sqlserver.data");
+    .WithDataVolume("VolumeMount.sqlserver.data")
+    .PublishAsConnectionString();
+
+
 var userManagerDb = sqlServer.AddDatabase("UserManagerDb");
 var taskManagerDb = sqlServer.AddDatabase("TaskManagerDb");
 //----------------
