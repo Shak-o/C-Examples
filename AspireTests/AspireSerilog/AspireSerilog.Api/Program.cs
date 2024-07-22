@@ -2,8 +2,6 @@ using AspireSerilog.Persistence;
 using AspireSerilog.ServiceDefaults;
 using Serilog;
 
-
-
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .WriteTo.Console()
