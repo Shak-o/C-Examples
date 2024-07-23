@@ -11,8 +11,17 @@ var count = new NameCounter().GetCount(data);
 
 Console.WriteLine(data);
 Console.WriteLine(count);
+// =======================
 
 // Bridge
-var tvRemote = new TvRemote();
-var tv = new Tv(tvRemote);
-tv.AddButtonAction();
+// Client code
+var tv = new Tv();
+var conditioner = new Conditioner();
+
+var tvRemote = new TvRemote(tv);
+tvRemote.Power();
+
+var conditionerRemote = new ConditionerRemote(conditioner);
+conditionerRemote.Power();
+conditionerRemote.IncreaseFanSpeed();
+// =======================

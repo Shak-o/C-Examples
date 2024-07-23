@@ -1,11 +1,12 @@
 ﻿namespace PatternExamples.Structural.Bridge;
 
-public class ConditionerRemote : IRemote
+public class ConditionerRemote(IDevice device) : Remote(device)
 {
-    private int _fanSpeed;
-    public void AddVolume(int amount)
+    private int _currentFanSpeed = 0;
+    
+    public void IncreaseFanSpeed()
     {
-        _fanSpeed += amount;
-        Console.WriteLine($"Fan speed set to: {_fanSpeed}");
+        _currentFanSpeed += 5;
+        device.SetVolume(5);
     }
 }

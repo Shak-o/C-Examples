@@ -1,12 +1,9 @@
 ﻿namespace PatternExamples.Structural.Bridge;
 
-public class TvRemote : IRemote
+public class TvRemote(IDevice device) : Remote(device)
 {
-    private int _volume;
-
-    public void AddVolume(int amount)
+    public void Mute()
     {
-        _volume += amount;
-        Console.WriteLine($"TV volume set to: {_volume}");
+        device.SetVolume(0);
     }
 }

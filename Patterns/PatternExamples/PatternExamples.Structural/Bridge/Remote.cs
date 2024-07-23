@@ -1,10 +1,20 @@
 ﻿namespace PatternExamples.Structural.Bridge;
 
-public class Remote : IRemote
+public class Remote(IDevice device)
 {
-    private int _currentAmount = 0;
-    public void AddVolume(int amount)
+    private bool _isOn;
+
+    public virtual void Power()
     {
-        _currentAmount += amount;
+        if (_isOn)
+        {
+            device.TurnOff();
+            _isOn = false;
+        }
+        else
+        {
+            device.TurnOn();
+            _isOn = true;
+        }
     }
 }

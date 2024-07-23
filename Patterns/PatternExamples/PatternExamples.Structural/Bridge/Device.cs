@@ -1,9 +1,20 @@
 ﻿namespace PatternExamples.Structural.Bridge;
 
-public class Device (IRemote remote)
+public class Device : IDevice
 {
-    public virtual void AddButtonAction()
+    private int _volume = 0;
+    public void TurnOn()
     {
-        remote.AddVolume(1);
+        Console.WriteLine("On");
+    }
+
+    public void TurnOff()
+    {
+        Console.WriteLine("Off");
+    }
+
+    public void SetVolume(int amount)
+    {
+        _volume = amount;
     }
 }

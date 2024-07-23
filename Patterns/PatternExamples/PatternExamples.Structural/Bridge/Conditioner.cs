@@ -1,9 +1,6 @@
 ﻿namespace PatternExamples.Structural.Bridge;
 
-public class Conditioner (IRemote remote) : Device(remote)
+public class Conditioner : Device
 {
-    public override void AddButtonAction()
-    {
-        remote.AddVolume(2);
-    }
+    
 }
