@@ -4,6 +4,8 @@ using PatternExamples.Structural.Adapter;
 using PatternExamples.Structural.Bridge;
 using PatternExamples.Structural.Composite;
 using PatternExamples.Structural.Composite.Employees;
+using PatternExamples.Structural.Decorator;
+using PatternExamples.Structural.Decorator.Decorators;
 
 // // Adapter
 // var dataRetriever = new XmlDataRetriever();
@@ -27,28 +29,36 @@ using PatternExamples.Structural.Composite.Employees;
 // conditionerRemote.IncreaseFanSpeed();
 // // =======================
 
-// Composite
-var developer = new Developer();
-var analyst = new Analyst();
-var tester = new Tester();
-var someoneInBetween = new SomeoneInBetween();
-var manager = new Manager();
+// // Composite
+// var developer = new Developer();
+// var analyst = new Analyst();
+// var tester = new Tester();
+// var someoneInBetween = new SomeoneInBetween();
+// var manager = new Manager();
+//
+// var department = new Department();
+// department.AddSomethingToCommandAround(developer);
+// department.AddSomethingToCommandAround(analyst);
+// department.AddSomethingToCommandAround(tester);
+// department.AddSomethingToCommandAround(someoneInBetween);
+// department.AddSomethingToCommandAround(manager);
+//
+// // Client code
+// void IWanna(ISomethingToCommandAround somethingToCommandAround)
+// {
+//     somethingToCommandAround.DoTask();
+//     Console.WriteLine("*System is buggy*");
+//     somethingToCommandAround.ExplainYourself();
+// }
+//
+// IWanna(developer);
+// Console.WriteLine("=====");
+// IWanna(department);
+// // =======================
 
-var department = new Department();
-department.AddSomethingToCommandAround(developer);
-department.AddSomethingToCommandAround(analyst);
-department.AddSomethingToCommandAround(tester);
-department.AddSomethingToCommandAround(someoneInBetween);
-department.AddSomethingToCommandAround(manager);
+// Decorator
+var notifier = new EmailNotifier(); // Default notifier
+var smsNotifier = new SmsNotifier(notifier); // Sms Decorator
+var facebookNotifier = new FacebookNotifier(smsNotifier); // Facebook Decorator
 
-// Client code
-void IWanna(ISomethingToCommandAround somethingToCommandAround)
-{
-    somethingToCommandAround.DoTask();
-    Console.WriteLine("*System is buggy*");
-    somethingToCommandAround.ExplainYourself();
-}
-
-IWanna(developer);
-Console.WriteLine("=====");
-IWanna(department);
+facebookNotifier.Send("You've got mail", "Giorgi Jondoie");
