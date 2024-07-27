@@ -2,26 +2,53 @@
 
 using PatternExamples.Structural.Adapter;
 using PatternExamples.Structural.Bridge;
+using PatternExamples.Structural.Composite;
+using PatternExamples.Structural.Composite.Employees;
 
-// Adapter
-var dataRetriever = new XmlDataRetriever();
-var jsonAdapter = new JsonAdapter(dataRetriever);
-var data = jsonAdapter.GetData();
-var count = new NameCounter().GetCount(data);
+// // Adapter
+// var dataRetriever = new XmlDataRetriever();
+// var jsonAdapter = new JsonAdapter(dataRetriever);
+// var data = jsonAdapter.GetData();
+// var count = new NameCounter().GetCount(data);
+//
+// Console.WriteLine(data);
+// Console.WriteLine(count);
+// // =======================
+//
+// // Bridge
+// var tv = new Tv();
+// var conditioner = new Conditioner();
+//
+// var tvRemote = new TvRemote(tv);
+// tvRemote.Power();
+//
+// var conditionerRemote = new ConditionerRemote(conditioner);
+// conditionerRemote.Power();
+// conditionerRemote.IncreaseFanSpeed();
+// // =======================
 
-Console.WriteLine(data);
-Console.WriteLine(count);
-// =======================
+// Composite
+var developer = new Developer();
+var analyst = new Analyst();
+var tester = new Tester();
+var someoneInBetween = new SomeoneInBetween();
+var manager = new Manager();
 
-// Bridge
+var department = new Department();
+department.AddSomethingToCommandAround(developer);
+department.AddSomethingToCommandAround(analyst);
+department.AddSomethingToCommandAround(tester);
+department.AddSomethingToCommandAround(someoneInBetween);
+department.AddSomethingToCommandAround(manager);
+
 // Client code
-var tv = new Tv();
-var conditioner = new Conditioner();
+void IWanna(ISomethingToCommandAround somethingToCommandAround)
+{
+    somethingToCommandAround.DoTask();
+    Console.WriteLine("*System is buggy*");
+    somethingToCommandAround.ExplainYourself();
+}
 
-var tvRemote = new TvRemote(tv);
-tvRemote.Power();
-
-var conditionerRemote = new ConditionerRemote(conditioner);
-conditionerRemote.Power();
-conditionerRemote.IncreaseFanSpeed();
-// =======================
+IWanna(developer);
+Console.WriteLine("=====");
+IWanna(department);
