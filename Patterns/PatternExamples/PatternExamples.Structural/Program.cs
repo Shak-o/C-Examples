@@ -6,6 +6,7 @@ using PatternExamples.Structural.Composite;
 using PatternExamples.Structural.Composite.Employees;
 using PatternExamples.Structural.Decorator;
 using PatternExamples.Structural.Decorator.Decorators;
+using PatternExamples.Structural.Facade;
 
 // // Adapter
 // var dataRetriever = new XmlDataRetriever();
@@ -62,3 +63,8 @@ var smsNotifier = new SmsNotifier(notifier); // Sms Decorator
 var facebookNotifier = new FacebookNotifier(smsNotifier); // Facebook Decorator
 
 facebookNotifier.Send("You've got mail", "Giorgi Jondoie");
+// =======================
+
+// Facade
+var facade = new HttpFacade();
+await facade.MakeRequest(new Developer());
