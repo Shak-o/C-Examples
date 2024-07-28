@@ -2,7 +2,6 @@
 
 namespace PatternExamples.Structural.Adapter;
 
-// Let pretend this is 3rd party library
 public class NameCounter
 {
     public int GetCount(string json)

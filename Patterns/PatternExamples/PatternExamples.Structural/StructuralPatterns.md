@@ -1,5 +1,7 @@
 ﻿# Structural Patterns  
 ## Adapter
+
+Adapter is a structural design pattern that allows objects with incompatible interfaces to collaborate.
 წარმოვიდგინოთ რომ ვემუშავებით რაღაც ბანძ ძველ აპლიკაციას, რომელიც მონაცემთა მიმოცვლისთვის და ინფორმაციის შესანახად
 XML ფორმატს იყენებს. ახლა წარმოვიდგინოთ რომ ამ აპლიკაციაში ახალი ბიბლიოთეკის დამატება გვინდა, რომელიც
 ჩვენს მონაცემებს ლამაზად დახატავს და სხვადასხვა ჩარტებისა თუ ნახაზების სახით წარმოადგენს. იდეა კარგია მაგრამ
@@ -25,6 +27,11 @@ XML ფორმატს იყენებს. ახლა წარმოვ
 Service ს და აიძულოს მათ კოლაბორაცია.
 
 შეგვიძლია იგივე ქეისის კოდის მაგალითიც ვნახოთ.
+
+### Pros and Cons
+* Single Responsibility Principle. You can separate the interface or data conversion code from the primary business logic of the program.
+* Open/Closed Principle. You can introduce new types of adapters into the program without breaking the existing client code, as long as they work with the adapters through the client interface.
+* The overall complexity of the code increases because you need to introduce a set of new interfaces and classes. Sometimes it’s simpler just to change the service class so that it matches the rest of your code.
 
 ## Bridge
 
@@ -55,7 +62,8 @@ Gang Of Four წიგნში აბსტრაქცია და იმპ�
 აბსტრაქცია არის რაღაც ენთითის ზედა დონის მართვის შრე (ლეიერი). მას დამოუკიდებლად არაფრის გაკეთება არ უნდა
 შეეძლოს და რეალური საქმე იმპლემენტაციას უნდა გადაულოცოს. მაინც აღვნიშნავ რომ აბსტრაქციასა და იმპლემენტაციაში
 C# ის აბსტრაქტ კლასი და ინტერფეისი არ იგულისხმება. აპლიკაციებზე საუბრისას აბსტრაქცია შეიძლება ნიშნავდეს GUI ს 
-ხოლო იმპლემენტაცია მის უკან მდგომ API ს. რომ შევაჯამოთ მსგავსი აპლიკაცია ორნაირად შეიძლება განვითარდეს: 
+ხოლო იმპლემენტაცია მის უკან მდგომ OS API ს. რომ შევაჯამოთ მსგავსი აპლიკაცია (GUI ით რომელმაც უნდა იმუშავოს რამდენიმე OS ზე) 
+ორნაირად შეიძლება განვითარდეს: 
 
 * გვაქვს რანდენიმე GUI (მომხმარებლების, ადმინების ა.შ.)
 * გვაქვს რამდენიმე API (სხვადასხვა OS ზე გასაშვებად და ა.შ. ???)
