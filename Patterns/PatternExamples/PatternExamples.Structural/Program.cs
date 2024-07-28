@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using BenchmarkDotNet.Running;
 using PatternExamples.Structural.Adapter;
 using PatternExamples.Structural.Bridge;
 using PatternExamples.Structural.Composite;
@@ -7,6 +8,7 @@ using PatternExamples.Structural.Composite.Employees;
 using PatternExamples.Structural.Decorator;
 using PatternExamples.Structural.Decorator.Decorators;
 using PatternExamples.Structural.Facade;
+using PatternExamples.Structural.Flyweight;
 
 // // Adapter
 // var dataRetriever = new XmlDataRetriever();
@@ -58,13 +60,17 @@ using PatternExamples.Structural.Facade;
 // // =======================
 
 // Decorator
-var notifier = new EmailNotifier(); // Default notifier
-var smsNotifier = new SmsNotifier(notifier); // Sms Decorator
-var facebookNotifier = new FacebookNotifier(smsNotifier); // Facebook Decorator
-
-facebookNotifier.Send("You've got mail", "Giorgi Jondoie");
+// var notifier = new EmailNotifier(); // Default notifier
+// var smsNotifier = new SmsNotifier(notifier); // Sms Decorator
+// var facebookNotifier = new FacebookNotifier(smsNotifier); // Facebook Decorator
+//
+// facebookNotifier.Send("You've got mail", "Giorgi Jondoie");
 // =======================
 
 // Facade
-var facade = new HttpFacade();
-await facade.MakeRequest(new Developer());
+// var facade = new HttpFacade();
+// await facade.MakeRequest(new Developer());
+// =======================
+
+// Flyweight
+var summary = BenchmarkRunner.Run<Benchmark>();
