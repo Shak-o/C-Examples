@@ -280,3 +280,22 @@ flyweight ობიექტებთან სამუშაოდ შეგ�
 გამოვიძახებთ შესაძლოა მისი მონაცემების რეკალკულაცია გვჭირდებოდეს.
 * ❌ კოდი რთულდება
 
+## Proxy
+
+პროქსი არის სტრუქტურული დიზაინ პატერნი, რომელიც საშუალებას გვაძლევს სხვა ობიექტის მაგივრად გამოვიყენოთ ასე ვთქვათ მოკი ან 
+ფლეისჰოლდერი. პროქსი აკონტროლებს წვდომას ორიგინალ ობიექტზე, რაც საშუალებას გვაძლევს შევასრულოთ მოქმედებები
+მანამდე ან მას შემდეგ რაც რექვესთი გადაეწოდება ორიგინალ ობიექტს.
+
+პროქსი პატერნი გვთავაზობს შევქმნათ ორიგინალი ობიექტის შემფუთავი პროქსი კლასი. როდესაც ამ კლასს მივმართავთ იგი შექმნის
+ორიგინალ ობიექტსაც თუ უვკე შექმნილი არაა. პროქსი პატერნი საშუალებას გვაძლევს ასევე წავამატოთ ფუნქციონალი არსებულ სერვისებს ისე რომ
+რამე არ გავაფუჭოთ. თუმცაღა სატესტოდ უფრო გამოიყენება ხოლმე ეს პროქსი.
+
+### Pros and Cons
+* ✅ You can control the service object without clients knowing about it.
+* ✅ You can manage the lifecycle of the service object when clients don’t care about it.
+* ✅ The proxy works even if the service object isn’t ready or is not available.
+* ✅ Open/Closed Principle. You can introduce new proxies without changing the service or clients.
+
+
+* ❌ The code may become more complicated since you need to introduce a lot of new classes.
+* ❌ The response from the service might get delayed.
