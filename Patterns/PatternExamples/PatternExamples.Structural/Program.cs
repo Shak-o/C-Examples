@@ -2,7 +2,7 @@
 
 using BenchmarkDotNet.Running;
 using PatternExamples.Structural.Adapter;
-using PatternExamples.Structural.Bridge;
+using PatternExamples.Structural.Bridge.Good;
 using PatternExamples.Structural.Composite;
 using PatternExamples.Structural.Composite.Employees;
 using PatternExamples.Structural.Decorator;
@@ -21,15 +21,18 @@ using PatternExamples.Structural.Flyweight;
 // // =======================
 //
 // // Bridge
-// var tv = new Tv();
-// var conditioner = new Conditioner();
-//
-// var tvRemote = new TvRemote(tv);
-// tvRemote.Power();
-//
-// var conditionerRemote = new ConditionerRemote(conditioner);
-// conditionerRemote.Power();
-// conditionerRemote.IncreaseFanSpeed();
+var ledTv = new LedTv();
+var lcdTv = new LcdTv();
+
+var remote = new BasicRemote(ledTv);
+remote.TurnOn();
+remote.TurnOff();
+
+remote = new BasicRemote(lcdTv);
+remote.TurnOn();
+remote.TurnOff();
+
+
 // // =======================
 
 // // Composite
