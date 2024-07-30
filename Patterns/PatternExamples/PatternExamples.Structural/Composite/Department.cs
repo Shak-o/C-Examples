@@ -1,5 +1,6 @@
 ﻿namespace PatternExamples.Structural.Composite;
 
+// composite
 public class Department : ISomethingToCommandAround, IDepartment
 {
     private readonly List<ISomethingToCommandAround> _department = [];

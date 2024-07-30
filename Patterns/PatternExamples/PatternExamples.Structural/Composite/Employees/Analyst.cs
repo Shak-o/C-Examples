@@ -1,5 +1,6 @@
 ﻿namespace PatternExamples.Structural.Composite.Employees;
 
+// leaf
 public class Analyst : ISomethingToCommandAround
 {
     public void DoTask()
