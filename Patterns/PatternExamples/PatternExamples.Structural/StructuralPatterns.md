@@ -74,7 +74,11 @@ By using the Bridge pattern, you can independently change the remote control's f
 
 ### Pros and Cons
 
-TBD
+* You can create platform-independent classes and apps.
+* The client code works with high-level abstractions. It isn’t exposed to the platform details.
+* Open/Closed Principle. You can introduce new abstractions and implementations independently from each other.
+* Single Responsibility Principle. You can focus on high-level logic in the abstraction and on platform details in the implementation.
+* X You might make the code more complicated by applying the pattern to a highly cohesive class.
 
 ## Composite
 

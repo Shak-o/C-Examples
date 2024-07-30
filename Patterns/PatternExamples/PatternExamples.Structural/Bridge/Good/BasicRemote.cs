@@ -1,20 +1,27 @@
 ﻿namespace PatternExamples.Structural.Bridge.Good;
 
-public class BasicRemote(ITv tv) : RemoteControl(tv)
+public class BasicRemote: RemoteControl
 {
+    private readonly ITv _tv;
+
+    public BasicRemote(ITv tv) : base(tv)
+    {
+        _tv = tv;
+    }
+
     public override void TurnOn()
     {
-        Tv.PowerOn();
+        _tv.PowerOn();
     }
 
     public override void TurnOff()
     {
-        Tv.PowerOff();
+        _tv.PowerOff();
     }
 
     public override void ChangeChannel(int channel)
     {
-        Tv.SwitchChannel(channel);
+        _tv.SwitchChannel(channel);
     }
 }
 

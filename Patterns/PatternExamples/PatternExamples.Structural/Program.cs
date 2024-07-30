@@ -2,6 +2,7 @@
 
 using BenchmarkDotNet.Running;
 using PatternExamples.Structural.Adapter;
+using PatternExamples.Structural.Bridge.Bad;
 using PatternExamples.Structural.Bridge.Good;
 using PatternExamples.Structural.Composite;
 using PatternExamples.Structural.Composite.Employees;
@@ -9,6 +10,8 @@ using PatternExamples.Structural.Decorator;
 using PatternExamples.Structural.Decorator.Decorators;
 using PatternExamples.Structural.Facade;
 using PatternExamples.Structural.Flyweight;
+using LcdTv = PatternExamples.Structural.Bridge.Good.LcdTv;
+using LedTv = PatternExamples.Structural.Bridge.Good.LedTv;
 
 // // Adapter
 // var dataRetriever = new XmlDataRetriever();
@@ -31,7 +34,16 @@ remote.TurnOff();
 remote = new BasicRemote(lcdTv);
 remote.TurnOn();
 remote.TurnOff();
+// Bad
+var badLedTv = new PatternExamples.Structural.Bridge.Bad.LedTv();
+var badLcdTv = new PatternExamples.Structural.Bridge.Bad.LcdTv();
 
+var lcdRemote = new LcdRemote(badLcdTv);
+lcdRemote.TurnOn();
+lcdRemote.TurnOff();
+
+var ledRemote = new LedTvRemote(badLedTv);
+ledRemote.TurnOn();
 
 // // =======================
 
@@ -76,4 +88,4 @@ remote.TurnOff();
 // =======================
 
 // Flyweight
-var summary = BenchmarkRunner.Run<Benchmark>();
+// var summary = BenchmarkRunner.Run<Benchmark>();
