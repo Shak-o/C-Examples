@@ -2,34 +2,49 @@
 
 using BenchmarkDotNet.Running;
 using PatternExamples.Structural.Adapter;
-using PatternExamples.Structural.Bridge;
+using PatternExamples.Structural.Bridge.Bad;
+using PatternExamples.Structural.Bridge.Good;
 using PatternExamples.Structural.Composite;
 using PatternExamples.Structural.Composite.Employees;
 using PatternExamples.Structural.Decorator;
 using PatternExamples.Structural.Decorator.Decorators;
 using PatternExamples.Structural.Facade;
 using PatternExamples.Structural.Flyweight;
+using LcdTv = PatternExamples.Structural.Bridge.Good.LcdTv;
+using LedTv = PatternExamples.Structural.Bridge.Good.LedTv;
 
 // // Adapter
-// var dataRetriever = new XmlDataRetriever();
-// var jsonAdapter = new JsonAdapter(dataRetriever);
-// var data = jsonAdapter.GetData();
-// var count = new NameCounter().GetCount(data);
-//
-// Console.WriteLine(data);
-// Console.WriteLine(count);
+var dataRetriever = new XmlDataRetriever();
+var jsonAdapter = new JsonAdapter(dataRetriever);
+var data = jsonAdapter.GetData();
+var count = new NameCounter().GetCount(data);
+
+Console.WriteLine(data);
+Console.WriteLine(count);
 // // =======================
 //
 // // Bridge
-// var tv = new Tv();
-// var conditioner = new Conditioner();
+// var ledTv = new LedTv();
+// var lcdTv = new LcdTv();
 //
-// var tvRemote = new TvRemote(tv);
-// tvRemote.Power();
+// var remote = new BasicRemote(ledTv);
+// remote.TurnOn();
+// remote.TurnOff();
 //
-// var conditionerRemote = new ConditionerRemote(conditioner);
-// conditionerRemote.Power();
-// conditionerRemote.IncreaseFanSpeed();
+// remote = new BasicRemote(lcdTv);
+// remote.TurnOn();
+// remote.TurnOff();
+// // Bad
+// var badLedTv = new PatternExamples.Structural.Bridge.Bad.LedTv();
+// var badLcdTv = new PatternExamples.Structural.Bridge.Bad.LcdTv();
+//
+// var lcdRemote = new LcdRemote(badLcdTv);
+// lcdRemote.TurnOn();
+// lcdRemote.TurnOff();
+//
+// var ledRemote = new LedTvRemote(badLedTv);
+// ledRemote.TurnOn();
+
 // // =======================
 
 // // Composite
@@ -73,4 +88,4 @@ using PatternExamples.Structural.Flyweight;
 // =======================
 
 // Flyweight
-var summary = BenchmarkRunner.Run<Benchmark>();
+// var summary = BenchmarkRunner.Run<Benchmark>();
