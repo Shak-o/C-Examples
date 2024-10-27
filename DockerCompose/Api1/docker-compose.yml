@@ -1,0 +1,12 @@
+﻿services:
+  api1:
+    image: api1
+    build:
+      context: .
+      dockerfile: Api1/Dockerfile
+
+  mvcapp:
+    image: mvcapp
+    build:
+      context: .
+      dockerfile: MVCApp/Dockerfile
