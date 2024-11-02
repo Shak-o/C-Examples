@@ -4,9 +4,13 @@
     build:
       context: .
       dockerfile: Api1/Dockerfile
+    ports:
+      - "1243:8080"    
 
   mvcapp:
     image: mvcapp
     build:
       context: .
       dockerfile: MVCApp/Dockerfile
+    ports:
+      - "1244:8080"
