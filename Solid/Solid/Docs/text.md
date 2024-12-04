@@ -67,5 +67,200 @@ The **Open/Closed Principle (OCP)** is one of the five SOLID principles of objec
 - **Abstraction**: By using interfaces, abstract classes, or polymorphism, behaviors can be defined in a way that allows extensions to replace or add implementations without changing the original structure.
 - **Design Patterns**: Patterns like Strategy, Decorator, and Observer facilitate adhering to the Open/Closed Principle.
 
-Would you like to explore examples or how to implement this in code?
+A real-life example where the **Open/Closed Principle (OCP)** shines is in building an API that handles multiple services, such as a payment gateway integrating various payment methods. This can include **3-tier architecture**, **repositories**, and extensible service logic for each payment provider.
+
+---
+
+### **Scenario: Payment API**
+
+You are building a **Payment API** that processes payments using multiple providers (e.g., PayPal, Stripe, Square). The API adheres to a **3-tier architecture**:
+
+1. **Presentation Layer**: Handles HTTP requests.
+2. **Business Logic Layer**: Processes the request and applies the business logic.
+3. **Data Access Layer**: Manages database interactions through repositories.
+
+The requirements:
+- New payment providers can be added with minimal changes to existing code.
+- Payment methods (e.g., card, bank transfer) and behavior differ between providers.
+
+---
+
+### **Initial Design (Violation of OCP)**
+
+A naive implementation might look like this in the **Business Logic Layer**:
+
+```csharp
+public class PaymentService
+{
+    public string ProcessPayment(string provider, decimal amount)
+    {
+        if (provider == "PayPal")
+        {
+            // Logic for PayPal payment
+            return "PayPal payment processed.";
+        }
+        else if (provider == "Stripe")
+        {
+            // Logic for Stripe payment
+            return "Stripe payment processed.";
+        }
+        else if (provider == "Square")
+        {
+            // Logic for Square payment
+            return "Square payment processed.";
+        }
+        else
+        {
+            throw new NotImplementedException("Unknown provider.");
+        }
+    }
+}
+```
+
+#### **Issues**:
+1. Adding a new provider requires modifying the `ProcessPayment` method, increasing the risk of bugs.
+2. No clear separation of concerns.
+3. Violates OCP as the code must be modified for new functionality.
+
+---
+
+### **Refactored Design (Adheres to OCP)**
+
+#### **Step 1: Define a Payment Abstraction**
+Create an interface for all payment providers:
+
+```csharp
+public interface IPaymentProvider
+{
+    string Name { get; }
+    string ProcessPayment(decimal amount);
+}
+```
+
+#### **Step 2: Implement Payment Providers**
+Each provider implements the `IPaymentProvider` interface:
+
+```csharp
+public class PayPalProvider : IPaymentProvider
+{
+    public string Name => "PayPal";
+
+    public string ProcessPayment(decimal amount)
+    {
+        // PayPal-specific logic
+        return $"PayPal payment of {amount:C} processed.";
+    }
+}
+
+public class StripeProvider : IPaymentProvider
+{
+    public string Name => "Stripe";
+
+    public string ProcessPayment(decimal amount)
+    {
+        // Stripe-specific logic
+        return $"Stripe payment of {amount:C} processed.";
+    }
+}
+```
+
+#### **Step 3: Use a Factory or Service Locator**
+Introduce a **factory** to manage providers dynamically:
+
+```csharp
+public class PaymentProviderFactory
+{
+    private readonly IEnumerable<IPaymentProvider> _providers;
+
+    public PaymentProviderFactory(IEnumerable<IPaymentProvider> providers)
+    {
+        _providers = providers;
+    }
+
+    public IPaymentProvider GetProvider(string name)
+    {
+        return _providers.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+               ?? throw new NotImplementedException($"Provider {name} not implemented.");
+    }
+}
+```
+
+#### **Step 4: Update the Service Layer**
+The `PaymentService` now delegates the responsibility to the factory:
+
+```csharp
+public class PaymentService
+{
+    private readonly PaymentProviderFactory _providerFactory;
+
+    public PaymentService(PaymentProviderFactory providerFactory)
+    {
+        _providerFactory = providerFactory;
+    }
+
+    public string ProcessPayment(string provider, decimal amount)
+    {
+        var paymentProvider = _providerFactory.GetProvider(provider);
+        return paymentProvider.ProcessPayment(amount);
+    }
+}
+```
+
+#### **Step 5: Data Access with Repositories**
+A repository can handle transaction logging or audit trails:
+
+```csharp
+public interface IPaymentRepository
+{
+    void LogTransaction(string provider, decimal amount, string status);
+}
+
+public class PaymentRepository : IPaymentRepository
+{
+    public void LogTransaction(string provider, decimal amount, string status)
+    {
+        // Save to the database
+        Console.WriteLine($"Logged: {provider}, {amount:C}, {status}");
+    }
+}
+```
+
+#### **Step 6: Use Dependency Injection (DI)**
+Wire up dependencies in the **Startup.cs** or similar configuration file:
+
+```csharp
+services.AddScoped<IPaymentProvider, PayPalProvider>();
+services.AddScoped<IPaymentProvider, StripeProvider>();
+services.AddScoped<PaymentProviderFactory>();
+services.AddScoped<PaymentService>();
+services.AddScoped<IPaymentRepository, PaymentRepository>();
+```
+
+---
+
+### **Adding a New Provider**
+To add a new provider (e.g., Square), create a new implementation:
+
+```csharp
+public class SquareProvider : IPaymentProvider
+{
+    public string Name => "Square";
+
+    public string ProcessPayment(decimal amount)
+    {
+        // Square-specific logic
+        return $"Square payment of {amount:C} processed.";
+    }
+}
+```
+
+Register the provider in your DI container, and you're done! No changes to existing classes like `PaymentService` or `PaymentProviderFactory`.
+
+---
+
+### **Benefits of This Design**
+1. **Adherence to OCP**: Adding a new provider does not modify existing code, only extends functionality.
+2. **Separation of Concerns**: Each provider handles its logic independently.
+3. **Scalability**: Easy to add new providers or modify existing ones.
+4. **Testability**: Individual providers can be unit tested, and the factory/service can be mocked in tests.
 
