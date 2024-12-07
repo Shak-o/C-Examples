@@ -9,6 +9,9 @@
 - **Template Method Pattern**: To enforce behavior through an abstract class.
 - **Factory Method Pattern**: To create objects ensuring they conform to expected behavior.
 
+In OOP:  
+Polymorphism: Subtypes must be substitutable for their base types, ensuring consistency in behavior.
+
 ---
 
 ### **Example (C#)**:

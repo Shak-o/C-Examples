@@ -9,6 +9,10 @@
 - **Strategy Pattern**: To allow behaviors to be selected at runtime.
 - **Decorator Pattern**: To dynamically add behavior to objects without altering their structure.
 
+In OOP:  
+Inheritance: Extend behavior through subclassing without modifying existing code.  
+Polymorphism: Use polymorphic behavior to introduce new functionality via interfaces or abstract classes.
+
 ---
 
 ### **Example (C#)**:

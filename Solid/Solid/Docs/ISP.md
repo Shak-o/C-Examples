@@ -8,6 +8,9 @@
 - **Adapter Pattern**: To adapt different interfaces to a client’s needs.
 - **Proxy Pattern**: To provide a simplified interface to complex functionality.
 
+In OOP:  
+Abstraction: Define small, specific interfaces tailored to the needs of clients instead of large, general-purpose ones.
+
 ---
 
 ### **Example (C#)**:

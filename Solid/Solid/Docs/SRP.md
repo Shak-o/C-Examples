@@ -1,11 +1,15 @@
 ﻿### **Single Responsibility Principle (SRP)**
 **Definition**: A class should have only one reason to change, meaning it should only have one responsibility or one purpose.
+The functional in theory requiring changes should be only one. 
 
 **Why**: This makes the code easier to understand, test, and maintain.
 
 **Pattern to Implement SRP**:
 - **Facade Pattern**: To group related functionality and delegate responsibilities to individual classes.
 - **Repository Pattern**: To separate data access logic from business logic.
+
+In OOP:  
+Encapsulation: Ensure that a class encapsulates a single responsibility or cohesive functionality.
 
 ---
 
@@ -55,3 +59,4 @@ public class EmployeeReportGenerator
 Now, each class has a single responsibility:
 - `EmployeeRepository` handles database operations.
 - `EmployeeReportGenerator` handles report generation.
+

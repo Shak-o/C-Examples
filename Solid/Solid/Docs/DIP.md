@@ -9,6 +9,10 @@
 - **Dependency Injection**: Pass dependencies through constructors, methods, or properties.
 - **Service Locator Pattern**: Provide a centralized way to resolve dependencies.
 
+In OOP:  
+Abstraction: High-level modules depend on abstractions, enabling decoupling from low-level implementations.  
+Dependency Injection: Use constructors, methods, or property injection to supply dependencies at runtime.
+
 ---
 
 ### **Example (C#)**:
